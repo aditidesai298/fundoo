@@ -14,9 +14,6 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -133,5 +130,11 @@ public class EmailSender {
 		properties.put("mail.smtp.starttls.enable", "true"); // enable STARTTLS
 		return properties;
 
+		
+	}
+	public static void main (String args[]) {
+		EmailSender send=new EmailSender();
+		send.sendMail("aditi.desai298@gmail.com","hello","hello");
+		System.out.println("Inside emailZ");
 	}
 }
