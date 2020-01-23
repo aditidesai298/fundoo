@@ -11,7 +11,9 @@ import com.bridgelabz.fundoo.model.LoginDto;
 import com.bridgelabz.fundoo.model.RegisterDto;
 import com.bridgelabz.fundoo.model.User;
 import com.bridgelabz.fundoo.repository.IUserRepository;
+import com.bridgelabz.fundoo.util.EmailSender;
 import com.bridgelabz.fundoo.util.JwtGenerator;
+import com.bridgelabz.fundoo.util.Util;
 
 @Service
 public class UserService implements IUserService {
@@ -22,6 +24,9 @@ public class UserService implements IUserService {
 	private IUserRepository urepo;
 	@Autowired
 	private JwtGenerator jwtToken;
+	@Autowired
+	private EmailSender emailServiceProvider;
+	
 
 	@Override
 	public boolean register(RegisterDto UserDto) {
@@ -42,6 +47,12 @@ public class UserService implements IUserService {
 		newU.setVerified(false);
 		
 		urepo.save(newU);
+		
+		String emailBodyContaintLink = Util.createLink("http://192.168.1.41:8080/user/verification",
+				jwtToken.generateToken(newU.getId()));
+		emailServiceProvider.sendMail(newU.getEmail(), "registration link", emailBodyContaintLink);
+		
+		
 		return true;
 
 	}

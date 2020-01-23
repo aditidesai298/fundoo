@@ -21,15 +21,6 @@ public class EmailSender {
 	private static final String SENDER_EMAIL_ID = System.getenv("email");
 	private static final String SENDER_PASSWORD = System.getenv("password");
 
-	/**
-	 * This function takes following input parameter and configure the
-	 * authentication of smtp and port 587 and authorisation and send the mail to
-	 * the assigned user details.
-	 * 
-	 * @param toEmailId
-	 * @param subject
-	 * @param bodyContaint
-	 */
 	public void sendMail(String toEmailId, String subject, String bodyContaint) {
 		Authenticator authentication = new Authenticator() {
 			@Override
@@ -47,17 +38,7 @@ public class EmailSender {
 
 	}
 
-	/**
-	 * This function takes following information and sets all the header information
-	 * of the email.
-	 * 
-	 * @param session as Current session information
-	 * @param toEmail as String receiver's mail id
-	 * @param subject as String input parameter
-	 * @param body    as String input parameter
-	 * @return MimeMessage class
-	 * @throws MessagingException 
-	 */
+
 	private MimeMessage mimeMessageConfiguration(Session session, String toEmail, String subject, String body) throws MessagingException {
 
 		MimeMessage mimeMessage = new MimeMessage(session);
@@ -132,9 +113,5 @@ public class EmailSender {
 
 		
 	}
-	public static void main (String args[]) {
-		EmailSender send=new EmailSender();
-		send.sendMail("aditi.desai298@gmail.com","hello","hello");
-		System.out.println("Inside emailZ");
-	}
+
 }

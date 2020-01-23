@@ -16,7 +16,7 @@ import com.bridgelabz.fundoo.service.IUserService;
 
 @RestController
 @RequestMapping("user")
-//@CrossOrigin(origins = "http://localhost:8081")
+
 public class UserController {
 	@Autowired
 	private IUserService userService;
