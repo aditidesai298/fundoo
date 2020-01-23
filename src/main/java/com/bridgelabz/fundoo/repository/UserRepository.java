@@ -22,17 +22,14 @@ public class UserRepository implements IUserRepository{
 	return newUser;
 		
 	}
-    @Override
-	public boolean verifyUser(Long id) {
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	public User getUser(String emailId) {
 		Session session = entityManager.unwrap(Session.class);
-		@SuppressWarnings("rawtypes")
-		Query query = session.createQuery("update User set is_verified=:verified" + "where id=:id");
-		query.setParameter("verified", true);
-		query.setParameter("id", id);
-		if (query.executeUpdate() > 0) {
-			return true;
-		}
-		return false;
+		Query emailFetchQuery = session.createQuery("FROM User where emailId=:emailId");
+		emailFetchQuery.setParameter("emailId", emailId);
+		return (User) emailFetchQuery.uniqueResult();
 	}
 	
 
