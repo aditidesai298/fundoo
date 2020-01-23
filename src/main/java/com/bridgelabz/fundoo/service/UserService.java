@@ -11,33 +11,32 @@ import com.bridgelabz.fundoo.model.User;
 import com.bridgelabz.fundoo.model.UserDto;
 import com.bridgelabz.fundoo.repository.IUserRepository;
 
-
 @Service
 public class UserService implements IUserService {
-	
-	@Autowired 
+
+	@Autowired
 	private BCryptPasswordEncoder pe;
 	@Autowired
 	private IUserRepository urepo;
 
-	
-
 	@Override
 	public boolean register(UserDto UserDto) {
-		User u1=urepo.getUser(UserDto.getEmail());
-		if (u1!=null)
-		{
+
+		User u1 = urepo.getUser(UserDto.getEmail());
+		System.out.println("Email :" + u1);
+		if (u1 != null) {
 			return false;
-			
+
 		}
-		User newU=new User();
+
+		User newU = new User();
 		BeanUtils.copyProperties(UserDto, newU);
 		newU.setCreatedDate(LocalDateTime.now());
 		newU.setPassword(pe.encode(newU.getPassword()));
 		newU.setVerified(false);
 		urepo.save(newU);
 		return true;
-	
+
 	}
 
 }

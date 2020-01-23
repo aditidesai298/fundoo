@@ -1,3 +1,4 @@
+
 package com.bridgelabz.fundoo.model;
 
 import java.time.LocalDateTime;
@@ -10,7 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="user")
+//@Table(name="user")
 public class User {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -21,7 +22,7 @@ public class User {
 	@Column(unique=true)
 	private String email;
 	private String password;
-	private String number;
+	private String mob_number;
 	private LocalDateTime createdDate;
 	@Column(nullable=false)
 	private boolean isVerified;
@@ -55,12 +56,7 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public String getNumber() {
-		return number;
-	}
-	public void setNumber(String number) {
-		this.number = number;
-	}
+	
 	public LocalDateTime getCreatedDate() {
 		return createdDate;
 	}
@@ -76,7 +72,13 @@ public class User {
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", fname=" + fname + ", lname=" + lname + ", email=" + email + ", password="
-				+ password + ", number=" + number + ", createdDate=" + createdDate + ", isVerified=" + isVerified + "]";
+				+ password + ", number=" + mob_number + ", createdDate=" + createdDate + ", isVerified=" + isVerified + "]";
+	}
+	public String getMob_number() {
+		return mob_number;
+	}
+	public void setMob_number(String mob_number) {
+		this.mob_number = mob_number;
 	}
 
 }

@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.bridgelabz.fundoo;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

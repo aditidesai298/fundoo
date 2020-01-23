@@ -17,7 +17,7 @@ public class SwaggerConfig {
 	@Bean
 	public Docket productApi() {
 		return new Docket(DocumentationType.SWAGGER_2).select()
-				.apis(RequestHandlerSelectors.basePackage("com.bridgelabz.fundoo.controller")).paths(regex("/user.*"))
+				.apis(RequestHandlerSelectors.basePackage("com.bridgelabz.fundoo.controller")).paths(regex("/.*"))
 				.build();
 	}
 }

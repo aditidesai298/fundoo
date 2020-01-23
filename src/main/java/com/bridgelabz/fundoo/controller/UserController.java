@@ -3,6 +3,7 @@ package com.bridgelabz.fundoo.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,18 +14,19 @@ import com.bridgelabz.fundoo.response.Response;
 import com.bridgelabz.fundoo.service.IUserService;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("user")
+//@CrossOrigin(origins = "http://localhost:8081")
 public class UserController {
 	@Autowired
 	private IUserService userService;
 
-	@PostMapping("/registration")
-	public ResponseEntity<Response> registration(@RequestBody UserDto newUserDTO) {
+	@PostMapping("registration")
+	public ResponseEntity<Response> registration(@RequestBody UserDto newDto) {
 
+		System.out.println("Inside Controller...");
+		boolean rstatus = userService.register(newDto);
 
-		boolean resultStatus = userService.register(newUserDTO);
-
-		if (resultStatus == false) {
+		if ((rstatus) == false) {
 			return ResponseEntity.status(HttpStatus.ALREADY_REPORTED)
 					.body(new Response("user already exist", 400));
 		}
