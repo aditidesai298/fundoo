@@ -1,8 +1,8 @@
 package com.bridgelabz.fundoo.service;
 
-import com.bridgelabz.fundoo.model.UserDto;
+import com.bridgelabz.fundoo.model.RegisterDto;
 
 public interface IUserService {
-	public boolean register(UserDto UserDto);
+	public boolean register(RegisterDto UserDto);
 
 }

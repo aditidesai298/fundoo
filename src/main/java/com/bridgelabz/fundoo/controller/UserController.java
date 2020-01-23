@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bridgelabz.fundoo.model.UserDto;
+import com.bridgelabz.fundoo.model.LoginDto;
+import com.bridgelabz.fundoo.model.RegisterDto;
 import com.bridgelabz.fundoo.response.Response;
 import com.bridgelabz.fundoo.service.IUserService;
 
@@ -21,17 +22,25 @@ public class UserController {
 	private IUserService userService;
 
 	@PostMapping("registration")
-	public ResponseEntity<Response> registration(@RequestBody UserDto newDto) {
+	public ResponseEntity<Response> registration(@RequestBody RegisterDto rdto) {
 
 		System.out.println("Inside Controller...");
-		boolean rstatus = userService.register(newDto);
+		boolean rstatus = userService.register(rdto);
 
 		if ((rstatus) == false) {
 			return ResponseEntity.status(HttpStatus.ALREADY_REPORTED)
 					.body(new Response("user already exist", 400));
 		}
-		return ResponseEntity.status(HttpStatus.CREATED).body(new Response("registration successful", 200));
+		return ResponseEntity.status(HttpStatus.CREATED).body(new Response("Registration successful!", 200));
 
+	}
+	
+	@PostMapping("login")
+	public ResponseEntity<Response> login(@RequestBody LoginDto ldto) {
+		
+		boolean lstatus=userService.login(ldto);
+		return null;
+		
 	}
 
 

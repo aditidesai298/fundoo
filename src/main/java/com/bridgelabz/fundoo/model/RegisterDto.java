@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Component
 @Data
-public class UserDto {
+public class RegisterDto {
 	
 	private String fname;
 	private String lname;

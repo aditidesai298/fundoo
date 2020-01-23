@@ -8,7 +8,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.bridgelabz.fundoo.model.User;
-import com.bridgelabz.fundoo.model.UserDto;
+import com.bridgelabz.fundoo.model.RegisterDto;
 import com.bridgelabz.fundoo.repository.IUserRepository;
 
 @Service
@@ -20,7 +20,7 @@ public class UserService implements IUserService {
 	private IUserRepository urepo;
 
 	@Override
-	public boolean register(UserDto UserDto) {
+	public boolean register(RegisterDto UserDto) {
 
 		User u1 = urepo.getUser(UserDto.getEmail());
 		System.out.println("Email :" + u1);
