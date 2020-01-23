@@ -8,6 +8,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.bridgelabz.fundoo.model.User;
+import com.bridgelabz.fundoo.model.LoginDto;
 import com.bridgelabz.fundoo.model.RegisterDto;
 import com.bridgelabz.fundoo.repository.IUserRepository;
 
@@ -30,13 +31,24 @@ public class UserService implements IUserService {
 		}
 
 		User newU = new User();
+		
 		BeanUtils.copyProperties(UserDto, newU);
+		
 		newU.setCreatedDate(LocalDateTime.now());
 		newU.setPassword(pe.encode(newU.getPassword()));
 		newU.setVerified(false);
+		
 		urepo.save(newU);
 		return true;
 
+	}
+	
+	public User login (LoginDto ldto)
+	{
+		User u=urepo.getUser(ldto.getEmail());
+		
+		return null;
+		
 	}
 
 }

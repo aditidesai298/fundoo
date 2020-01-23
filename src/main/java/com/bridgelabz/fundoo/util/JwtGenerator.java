@@ -6,8 +6,12 @@ import java.io.UnsupportedEncodingException;
 import org.springframework.stereotype.Component;
 
 import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.Claim;
+import com.auth0.jwt.interfaces.DecodedJWT;
+import com.auth0.jwt.interfaces.Verification;
 
 @SuppressWarnings("serial")
 @Component
@@ -24,16 +28,23 @@ public class JwtGenerator implements Serializable {
 		return token;
 	}
 
-	public long parseToken(String token) {
-		long id = 0;
-		if (token != null) {
+	public Long decodeToken(String jwtToken) {
+		Long userId = (long) 0;
+		
+			if (jwtToken != null) {
+				Verification verification = null;
 				try {
-					id=JWT.require(Algorithm.HMAC512(SECRET)).build().verify(token).getClaim("id").asInt();
-				} catch (JWTVerificationException | IllegalArgumentException | UnsupportedEncodingException e) {
+					verification = JWT.require(Algorithm.HMAC256(SECRET));
+				} catch (IllegalArgumentException | UnsupportedEncodingException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-		}
-		return id;
+				JWTVerifier jwtverifier = verification.build();
+				DecodedJWT decodedjwt = jwtverifier.verify(jwtToken);
+				Claim claim = decodedjwt.getClaim("id");
+				userId = claim.asLong();
+			}
+		
+		return userId;
 	}
 }
