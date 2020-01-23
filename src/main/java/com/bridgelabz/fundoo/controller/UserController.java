@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,13 +36,22 @@ public class UserController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(new Response("Registration successful!", 200));
 
 	}
-	
-	@PostMapping("login")
-	public ResponseEntity<Response> login(@RequestBody LoginDto ldto) {
-		
-		boolean lstatus=userService.login(ldto);
-		return null;
-		
+//	
+//	@PostMapping("login")
+//	public ResponseEntity<Response> login(@RequestBody LoginDto ldto) {
+//		
+//		boolean lstatus=userService.login(ldto);
+//		return null;
+//		
+//	}
+	@GetMapping("verification/{token}")
+	public ResponseEntity<Response> verifyRegistration(@PathVariable("token") String token) {
+
+		if (userService.isVerified(token)) {
+			return ResponseEntity.status(HttpStatus.ACCEPTED).body(new Response("verified sucessfully.", 200));
+		}
+		return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(new Response("not verified", 400));
+
 	}
 
 

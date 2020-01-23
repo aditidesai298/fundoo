@@ -11,6 +11,7 @@ import com.bridgelabz.fundoo.model.User;
 import com.bridgelabz.fundoo.model.LoginDto;
 import com.bridgelabz.fundoo.model.RegisterDto;
 import com.bridgelabz.fundoo.repository.IUserRepository;
+import com.bridgelabz.fundoo.util.JwtGenerator;
 
 @Service
 public class UserService implements IUserService {
@@ -19,6 +20,8 @@ public class UserService implements IUserService {
 	private BCryptPasswordEncoder pe;
 	@Autowired
 	private IUserRepository urepo;
+	@Autowired
+	private JwtGenerator jwtToken;
 
 	@Override
 	public boolean register(RegisterDto UserDto) {
@@ -39,6 +42,13 @@ public class UserService implements IUserService {
 		newU.setVerified(false);
 		
 		urepo.save(newU);
+		return true;
+
+	}
+	
+	@Override
+	public boolean isVerified(String token) {
+		urepo.isVerified(jwtToken.decodeToken(token));
 		return true;
 
 	}

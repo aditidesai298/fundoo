@@ -34,6 +34,18 @@ public class UserRepository implements IUserRepository{
 		emailFetchQuery.setParameter("email", email);
 		return (User) emailFetchQuery.uniqueResult();
 	}
+
+	@Override
+	@Transactional
+	public boolean isVerified(Long id) {
+		Session session = entityManager.unwrap(Session.class);
+		Query query = session.createQuery("update User set is_verified=:verified" + " where id=:id");
+		query.setParameter("verified", true);
+		query.setParameter("id", id);
+		query.executeUpdate();
+		return true;
+	}
+	}
 	
 
-}
+
