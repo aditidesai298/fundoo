@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bridgelabz.fundoo.model.LoginDto;
@@ -41,14 +42,7 @@ public class UserController {
 
 	}
 
-//	
-//	@PostMapping("login")
-//	public ResponseEntity<Response> login(@RequestBody LoginDto ldto) {
-//		
-//		boolean lstatus=userService.login(ldto);
-//		return null;
-//		
-//	}
+
 	@GetMapping("verification/{token}")
 	public ResponseEntity<Response> verifyRegistration(@PathVariable("token") String token) {
 
@@ -67,12 +61,18 @@ public class UserController {
 		if (userInformation != null) {
 			String token = tk.generateToken(userInformation.getId());
 
-			return ResponseEntity.status(HttpStatus.ACCEPTED).header("login successful", dto.getEmail())
-					.body(new LoginResponse(token, 200, dto));
+			return ResponseEntity.status(HttpStatus.ACCEPTED).header("login successful! Token number:  ", dto.getEmail())
+					.body(new LoginResponse("Login successful"+token, 200, dto));
 		} else {
 
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new LoginResponse("Login failed", 400, dto));
 		}
+	}
+	
+	@PostMapping("/forgotpassword")
+	public ResponseEntity<Response> forgotpassword(@RequestParam("email") String email)
+	{
+		return null;
 	}
 
 }

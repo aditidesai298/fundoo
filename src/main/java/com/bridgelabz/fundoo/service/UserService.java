@@ -23,9 +23,11 @@ public class UserService implements IUserService {
 	@Autowired
 	private IUserRepository urepo;
 	@Autowired
-	private JwtGenerator jwtToken;
+	private JwtGenerator tokenobj;
 	@Autowired
-	private EmailSender emailServiceProvider;
+	private EmailSender emailobj;
+	@Autowired
+	private Util response;
 
 	@Override
 	public boolean register(RegisterDto UserDto) {
@@ -48,8 +50,8 @@ public class UserService implements IUserService {
 		urepo.save(newU);
 
 		String emailBodyContentLink = Util.createLink("http://localhost:8081/user/verification",
-				jwtToken.generateToken(newU.getId()));
-		emailServiceProvider.sendMail(newU.getEmail(), "registration link", emailBodyContentLink);
+				tokenobj.generateToken(newU.getId()));
+		emailobj.sendMail(newU.getEmail(), "registration link", emailBodyContentLink);
 
 		return true;
 
@@ -57,7 +59,7 @@ public class UserService implements IUserService {
 
 	@Override
 	public boolean isVerified(String token) {
-		urepo.verify(jwtToken.decodeToken(token));
+		urepo.verify(tokenobj.decodeToken(token));
 		return true;
 
 	}
@@ -71,13 +73,26 @@ public class UserService implements IUserService {
 			if (input_user.isVerified() && pe.matches(Ldto.getPassword(), input_user.getPassword())) {
 				return input_user;
 			}
-			String email_body_link = Util.createLink("http://192.168.1.41:8081" + "/user/verification",
-					jwtToken.generateToken(input_user.getId()));
-			emailServiceProvider.sendMail(input_user.getEmail(), "Registration Verification link", email_body_link);
+			String email_body_link = Util.createLink("http://localhost:8081" + "/user/verification",
+					tokenobj.generateToken(input_user.getId()));
+			emailobj.sendMail(input_user.getEmail(), "Registration Verification link", email_body_link);
 			return input_user;
 		}
 		// not registered
 		return null;
+	}
+
+	@Override
+	public boolean is_User_exists(String email) {
+		User user=urepo.getUser(email);
+		if (!user.isVerified()) {
+			return false;
+		}
+		String mail=response.createLink("http://localhost:8081"+"/user/forgotpassword",tokenobj.generateToken(user.getId()));
+		emailobj.sendMail(user.getEmail(), "verification", mail);
+		return true;
+		
+		
 	}
 	
 
