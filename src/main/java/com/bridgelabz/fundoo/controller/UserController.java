@@ -28,12 +28,12 @@ public class UserController {
 		boolean rstatus = userService.register(rdto);
 
 		if ((rstatus) == false) {
-			return ResponseEntity.status(HttpStatus.ALREADY_REPORTED)
-					.body(new Response("user already exist", 400));
+			return ResponseEntity.status(HttpStatus.ALREADY_REPORTED).body(new Response("user already exist", 400));
 		}
 		return ResponseEntity.status(HttpStatus.CREATED).body(new Response("Registration successful!", 200));
 
 	}
+
 //	
 //	@PostMapping("login")
 //	public ResponseEntity<Response> login(@RequestBody LoginDto ldto) {
@@ -51,6 +51,5 @@ public class UserController {
 		return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(new Response("not verified", 400));
 
 	}
-
 
 }

@@ -11,22 +11,21 @@ import org.springframework.transaction.annotation.Transactional;
 import com.bridgelabz.fundoo.model.User;
 
 @Repository
-public class UserRepository implements IUserRepository{
+@SuppressWarnings("rawtypes")
+public class UserRepository implements IUserRepository {
 	@Autowired
 	private EntityManager entityManager;
 
 	@Override
 	public User save(User newUser) {
-	System.out.println("Data :"+newUser.getEmail());
-	Session sess=entityManager.unwrap(Session.class);
-	sess.saveOrUpdate(newUser);
-	return newUser;
-		
+		System.out.println("Data :" + newUser.getEmail());
+		Session sess = entityManager.unwrap(Session.class);
+		sess.saveOrUpdate(newUser);
+		return newUser;
+
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
-	@Transactional
 	public User getUser(String email) {
 		Session sess = entityManager.unwrap(Session.class);
 		Query emailFetchQuery = sess.createQuery("FROM User where email=:email");
@@ -35,6 +34,7 @@ public class UserRepository implements IUserRepository{
 		return (User) emailFetchQuery.uniqueResult();
 	}
 
+	// to check for verified user
 	@Override
 	@Transactional
 	public boolean isVerified(Long id) {
@@ -45,7 +45,4 @@ public class UserRepository implements IUserRepository{
 		query.executeUpdate();
 		return true;
 	}
-	}
-	
-
-
+}

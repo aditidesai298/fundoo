@@ -1,4 +1,5 @@
 package com.bridgelabz.fundoo.util;
+
 public class Util {
 
 	private Util() {

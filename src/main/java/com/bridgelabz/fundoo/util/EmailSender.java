@@ -18,19 +18,27 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class EmailSender {
-	private static final String SENDER_EMAIL_ID = System.getenv("email");
-	private static final String SENDER_PASSWORD = System.getenv("password");
 
-	public void sendMail(String toEmailId, String subject, String bodyContaint) {
-		Authenticator authentication = new Authenticator() {
+	String from_email = "aditidesaifundoo@gmail.com";
+	String from_password = "1234aditi.fundoo!";
+
+	public void sendMail(String toEmailId, String subject, String bodyContent) {
+
+		Properties props = new Properties();
+		props.put("mail.smtp.host", "smtp.gmail.com"); // SMTP Host
+		props.put("mail.smtp.port", "587"); // TLS Port
+		props.put("mail.smtp.auth", "true"); // enable authent
+		props.put("mail.smtp.starttls.enable", "true"); // enable STARTTLS
+
+		Authenticator authent = new Authenticator() {
 			@Override
 			protected PasswordAuthentication getPasswordAuthentication() {
-				return new PasswordAuthentication(SENDER_EMAIL_ID, SENDER_PASSWORD);
+				return new PasswordAuthentication(from_email, from_password);
 			}
 		};
-		Session session = Session.getInstance(mailPropertiesSettings(), authentication);
+		Session session = Session.getInstance(props, authent);
 		try {
-			Transport.send(mimeMessageConfiguration(session, toEmailId, subject, bodyContaint));
+			Transport.send(mimeMessageConfiguration(session, toEmailId, subject, bodyContent));
 		} catch (MessagingException e) {
 			e.printStackTrace();
 
@@ -38,80 +46,63 @@ public class EmailSender {
 
 	}
 
-
-	private MimeMessage mimeMessageConfiguration(Session session, String toEmail, String subject, String body) throws MessagingException {
+	private MimeMessage mimeMessageConfiguration(Session session, String toEmail, String subject, String body)
+			throws MessagingException {
 
 		MimeMessage mimeMessage = new MimeMessage(session);
-		// set message headers
-		
-			try {
-				mimeMessage.addHeader("Content-type", "text/HTML; charset=UTF-8");
-			} catch (MessagingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			try {
-				mimeMessage.addHeader("format", "flowed");
-			} catch (MessagingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			try {
-				mimeMessage.addHeader("Content-Transfer-Encoding", "8bit");
-			} catch (MessagingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			try {
-				mimeMessage.setFrom(new InternetAddress(SENDER_EMAIL_ID, "Fundoo Note Application"));
-			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (MessagingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			try {
-				mimeMessage.setReplyTo(InternetAddress.parse(SENDER_EMAIL_ID, false));
-			} catch (AddressException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (MessagingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			try {
-				mimeMessage.setSubject(subject, "UTF-8");
-			} catch (MessagingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			try {
-				mimeMessage.setText(body, "UTF-8");
-			} catch (MessagingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			mimeMessage.setSentDate(new Date());
-			mimeMessage.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail, false));
-		
+
+		try {
+			mimeMessage.addHeader("Content-type", "text/HTML; charset=UTF-8");
+		} catch (MessagingException e) {
+
+			e.printStackTrace();
+		}
+		try {
+			mimeMessage.addHeader("format", "flowed");
+		} catch (MessagingException e) {
+
+			e.printStackTrace();
+		}
+		try {
+			mimeMessage.addHeader("Content-Transfer-Encoding", "8bit");
+		} catch (MessagingException e) {
+
+			e.printStackTrace();
+		}
+		try {
+			mimeMessage.setFrom(new InternetAddress(from_email, "Fundoo Note Application"));
+		} catch (UnsupportedEncodingException e) {
+
+			e.printStackTrace();
+		} catch (MessagingException e) {
+
+			e.printStackTrace();
+		}
+		try {
+			mimeMessage.setReplyTo(InternetAddress.parse(from_email, false));
+		} catch (AddressException e) {
+
+			e.printStackTrace();
+		} catch (MessagingException e) {
+
+			e.printStackTrace();
+		}
+		try {
+			mimeMessage.setSubject(subject, "UTF-8");
+		} catch (MessagingException e) {
+
+			e.printStackTrace();
+		}
+		try {
+			mimeMessage.setText(body, "UTF-8");
+		} catch (MessagingException e) {
+
+			e.printStackTrace();
+		}
+		mimeMessage.setSentDate(new Date());
+		mimeMessage.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail, false));
+
 		return mimeMessage;
-	}
-
-	/**
-	 * This class sets the properties configuaration of the mail and return it.
-	 * 
-	 * @return Properties class
-	 */
-	private Properties mailPropertiesSettings() {
-		Properties properties = new Properties();
-		properties.put("mail.smtp.host", "smtp.gmail.com"); // SMTP Host
-		properties.put("mail.smtp.port", "587"); // TLS Port
-		properties.put("mail.smtp.auth", "true"); // enable authentication
-		properties.put("mail.smtp.starttls.enable", "true"); // enable STARTTLS
-		return properties;
-
-		
 	}
 
 }

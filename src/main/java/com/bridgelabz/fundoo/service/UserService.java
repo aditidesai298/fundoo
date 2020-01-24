@@ -26,7 +26,6 @@ public class UserService implements IUserService {
 	private JwtGenerator jwtToken;
 	@Autowired
 	private EmailSender emailServiceProvider;
-	
 
 	@Override
 	public boolean register(RegisterDto UserDto) {
@@ -39,37 +38,35 @@ public class UserService implements IUserService {
 		}
 
 		User newU = new User();
-		
+
 		BeanUtils.copyProperties(UserDto, newU);
-		
+
 		newU.setCreatedDate(LocalDateTime.now());
 		newU.setPassword(pe.encode(newU.getPassword()));
 		newU.setVerified(false);
-		
+
 		urepo.save(newU);
-		
-		String emailBodyContaintLink = Util.createLink("http://192.168.1.41:8080/user/verification",
+
+		String emailBodyContentLink = Util.createLink("http://localhost:8081/user/verification",
 				jwtToken.generateToken(newU.getId()));
-		emailServiceProvider.sendMail(newU.getEmail(), "registration link", emailBodyContaintLink);
-		
-		
+		emailServiceProvider.sendMail(newU.getEmail(), "registration link", emailBodyContentLink);
+
 		return true;
 
 	}
-	
+
 	@Override
 	public boolean isVerified(String token) {
 		urepo.isVerified(jwtToken.decodeToken(token));
 		return true;
 
 	}
-	
-	public User login (LoginDto ldto)
-	{
-		User u=urepo.getUser(ldto.getEmail());
-		
+
+	public User login(LoginDto ldto) {
+		User u = urepo.getUser(ldto.getEmail());
+
 		return null;
-		
+
 	}
 
 }
