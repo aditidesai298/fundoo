@@ -62,11 +62,6 @@ public class UserService implements IUserService {
 
 	}
 
-	public User login(LoginDto ldto) {
-		User u = urepo.getUser(ldto.getEmail());
-
-		return null;
-
-	}
+	
 
 }
