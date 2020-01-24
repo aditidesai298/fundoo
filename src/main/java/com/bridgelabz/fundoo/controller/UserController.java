@@ -10,9 +10,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bridgelabz.fundoo.model.LoginDto;
 import com.bridgelabz.fundoo.model.RegisterDto;
+import com.bridgelabz.fundoo.model.User;
+import com.bridgelabz.fundoo.response.LoginResponse;
 import com.bridgelabz.fundoo.response.Response;
 import com.bridgelabz.fundoo.service.IUserService;
+import com.bridgelabz.fundoo.util.JwtGenerator;
 
 @RestController
 @RequestMapping("user")
@@ -20,6 +24,9 @@ import com.bridgelabz.fundoo.service.IUserService;
 public class UserController {
 	@Autowired
 	private IUserService userService;
+
+	@Autowired
+	private JwtGenerator tk;
 
 	@PostMapping("registration")
 	public ResponseEntity<Response> registration(@RequestBody RegisterDto rdto) {
@@ -50,6 +57,22 @@ public class UserController {
 		}
 		return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(new Response("not verified", 400));
 
+	}
+
+	@PostMapping("/login")
+	public ResponseEntity<LoginResponse> login(@RequestBody LoginDto info) {
+
+		User userInformation = userService.login(info);
+		System.out.println("inside login controler");
+		if (userInformation != null) {
+			String token = tk.generateToken(userInformation.getId());
+
+			return ResponseEntity.status(HttpStatus.ACCEPTED).header("login successfull", info.getEmail())
+					.body(new LoginResponse(token, 200, info));
+		} else {
+
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new LoginResponse("Login failed", 400, info));
+		}
 	}
 
 }
