@@ -8,6 +8,6 @@ public interface IUserRepository {
 
 	public User getUser(String emailId);
 
-	public boolean isVerified(Long id);
+	public boolean verify(Long id);
 
 }

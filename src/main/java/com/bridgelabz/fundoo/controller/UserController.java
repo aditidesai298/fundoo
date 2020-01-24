@@ -60,18 +60,18 @@ public class UserController {
 	}
 
 	@PostMapping("/login")
-	public ResponseEntity<LoginResponse> login(@RequestBody LoginDto info) {
+	public ResponseEntity<LoginResponse> login(@RequestBody LoginDto dto) {
 
-		User userInformation = userService.login(info);
-		System.out.println("inside login controler");
+		User userInformation = userService.login(dto);
+
 		if (userInformation != null) {
 			String token = tk.generateToken(userInformation.getId());
 
-			return ResponseEntity.status(HttpStatus.ACCEPTED).header("login successfull", info.getEmail())
-					.body(new LoginResponse(token, 200, info));
+			return ResponseEntity.status(HttpStatus.ACCEPTED).header("login successful", dto.getEmail())
+					.body(new LoginResponse(token, 200, dto));
 		} else {
 
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new LoginResponse("Login failed", 400, info));
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new LoginResponse("Login failed", 400, dto));
 		}
 	}
 

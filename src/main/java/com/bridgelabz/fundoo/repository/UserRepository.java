@@ -37,12 +37,17 @@ public class UserRepository implements IUserRepository {
 	// to check for verified user
 	@Override
 	@Transactional
-	public boolean isVerified(Long id) {
+	public boolean verify(Long id) {
 		Session session = entityManager.unwrap(Session.class);
 		Query query = session.createQuery("update User set is_verified=:verified" + " where id=:id");
 		query.setParameter("verified", true);
 		query.setParameter("id", id);
-		query.executeUpdate();
+		int status=query.executeUpdate();
+		if (status>0) {
 		return true;
 	}
+		else {
+			return false;
+		}
+}
 }

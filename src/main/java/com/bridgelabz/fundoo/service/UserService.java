@@ -17,10 +17,6 @@ import com.bridgelabz.fundoo.util.Util;
 
 @Service
 public class UserService implements IUserService {
-	
-	public static final String REGISTRATION_EMAIL_SUBJECT = "Registration Verification Link";
-	public static final String SERVER_ADDRESS = "http://192.168.1.41:8080";
-
 
 	@Autowired
 	private BCryptPasswordEncoder pe;
@@ -61,7 +57,7 @@ public class UserService implements IUserService {
 
 	@Override
 	public boolean isVerified(String token) {
-		urepo.isVerified(jwtToken.decodeToken(token));
+		urepo.verify(jwtToken.decodeToken(token));
 		return true;
 
 	}
@@ -75,7 +71,7 @@ public class UserService implements IUserService {
 			if (input_user.isVerified() && pe.matches(Ldto.getPassword(), input_user.getPassword())) {
 				return input_user;
 			}
-			String email_body_link = Util.createLink("http://192.168.1.41:8080" + "/user/verification",
+			String email_body_link = Util.createLink("http://192.168.1.41:8081" + "/user/verification",
 					jwtToken.generateToken(input_user.getId()));
 			emailServiceProvider.sendMail(input_user.getEmail(), "Registration Verification link", email_body_link);
 			return input_user;

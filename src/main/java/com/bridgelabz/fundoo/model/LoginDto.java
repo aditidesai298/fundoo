@@ -1,10 +1,13 @@
 package com.bridgelabz.fundoo.model;
 
+import javax.validation.constraints.Email;
+
 import org.springframework.stereotype.Component;
 
 @Component
 public class LoginDto {
 
+	@Email
 	private String email;
 	private String password;
 
