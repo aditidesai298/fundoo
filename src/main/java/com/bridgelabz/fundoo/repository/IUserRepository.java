@@ -1,5 +1,6 @@
 package com.bridgelabz.fundoo.repository;
 
+import com.bridgelabz.fundoo.model.UpdatePassDto;
 import com.bridgelabz.fundoo.model.User;
 
 public interface IUserRepository {
@@ -9,5 +10,7 @@ public interface IUserRepository {
 	public User getUser(String emailId);
 
 	public boolean verify(Long id);
+
+	public boolean updatePassword(UpdatePassDto updatePasswordinformation, long id);
 
 }

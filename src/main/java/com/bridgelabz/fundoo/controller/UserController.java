@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bridgelabz.fundoo.model.LoginDto;
 import com.bridgelabz.fundoo.model.RegisterDto;
+import com.bridgelabz.fundoo.model.UpdatePassDto;
 import com.bridgelabz.fundoo.model.User;
 import com.bridgelabz.fundoo.response.LoginResponse;
 import com.bridgelabz.fundoo.response.Response;
@@ -21,7 +23,6 @@ import com.bridgelabz.fundoo.util.JwtGenerator;
 
 @RestController
 @RequestMapping("user")
-
 public class UserController {
 	@Autowired
 	private IUserService userService;
@@ -42,7 +43,6 @@ public class UserController {
 
 	}
 
-
 	@GetMapping("verification/{token}")
 	public ResponseEntity<Response> verifyRegistration(@PathVariable("token") String token) {
 
@@ -61,18 +61,33 @@ public class UserController {
 		if (userInformation != null) {
 			String token = tk.generateToken(userInformation.getId());
 
-			return ResponseEntity.status(HttpStatus.ACCEPTED).header("login successful! Token number:  ", dto.getEmail())
-					.body(new LoginResponse("Login successful"+token, 200, dto));
+			return ResponseEntity.status(HttpStatus.ACCEPTED)
+					.header("login successful! Token number:  ", dto.getEmail())
+					.body(new LoginResponse("Login successful! Token number: " + token, 200, dto));
 		} else {
 
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new LoginResponse("Login failed", 400, dto));
 		}
 	}
-	
-	@PostMapping("/forgotpassword")
-	public ResponseEntity<Response> forgotpassword(@RequestParam("email") String email)
-	{
-		return null;
+
+	@PostMapping("forgotPassword")
+	public ResponseEntity<Response> forgotPassword(@RequestParam("email") String email) {
+		boolean fetchedUserStatus = userService.is_User_exists(email);
+		if (fetchedUserStatus) {
+			return ResponseEntity.status(HttpStatus.FOUND).body(new Response("found user", 302));
+		}
+		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new Response("not verified", 401));
+	}
+
+	@PutMapping("updatePassword/{token}")
+	public ResponseEntity<Response> updatePassword(@PathVariable("token") String token,
+			@RequestBody() UpdatePassDto upadatePassword) {
+		boolean updationStatus = userService.updatePassword(upadatePassword, token);
+		if (updationStatus) {
+			return ResponseEntity.status(HttpStatus.OK).body(new Response("updated sucessfully", 200));
+		}
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response("updation failed", 400));
+
 	}
 
 }
