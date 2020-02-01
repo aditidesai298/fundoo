@@ -1,6 +1,5 @@
 package com.bridgelabz.fundoo.repository;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -56,30 +55,5 @@ public class NoteRepository implements INoteRepository {
 
 	}
 	
-	@Transactional
-	@Override
-	public boolean setRestored(Long userId, Long noteId) {
 	
-		Session session = entityManager.unwrap(Session.class);
-		Note note = findById(noteId);
-		if (note.getId()==(userId)) {
-			if (note.isTrashed()) {
-				note.setTrashed(false);
-				note.setCreatedDate(LocalDateTime.now());
-				session.saveOrUpdate(note);
-				return true;
-			}
-			return false;
-		}
-
-		return false;
-	}
-
-	private Note findById(Long noteId) {
-		Session session = entityManager.unwrap(Session.class);
-		Query query = (Query) session.createQuery("from Note where id=:id");
-		query.setParameter("noteId", noteId);
-		return (Note) query.uniqueResult();
-	}
-
 }

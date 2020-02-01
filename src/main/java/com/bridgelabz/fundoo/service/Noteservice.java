@@ -189,11 +189,19 @@ public class Noteservice implements INoteService{
 	@Transactional
 	@Override
 	public boolean restored(String token, Long noteId) {
-		Long userId = (long) tokenobj.decodeToken(token);
-		if (nrepo.setRestored(userId, noteId)) {
+		
+		authenticatedUser(token);
+		
+		Note fetchedNote=verifiedNote(noteId);
+		if(fetchedNote.isTrashed()) {
+			fetchedNote.setTrashed(false);
+			fetchedNote.setCreatedDate(LocalDateTime.now());
+			nrepo.saveOrUpdate(fetchedNote);
 			return true;
+			
 		}
 		return false;
+	
 	}
 
 }
