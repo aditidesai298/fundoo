@@ -133,7 +133,7 @@ public class NoteController {
 			return ResponseEntity.status(HttpStatus.OK).body(new Response("note trashed", 200));
 		}
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-				.body(new Response("Opps...Already trashed!", 400));
+				.body(new Response("Already trashed!", 400));
 	}
 	
 }
