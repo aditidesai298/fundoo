@@ -107,6 +107,13 @@ public class NoteController {
 				.body(new Response("Already archived", 400));
 	}
 	
-
+	@ApiOperation(value = "pin/unpin operation of existing note for valid user")
+	@PatchMapping("{id}/pin")
+	public ResponseEntity<Response> pinNote(@PathVariable("id") long noteId, @RequestHeader("token") String token) {
+		if (nService.isPinnedNote(noteId, token)) {
+			return ResponseEntity.status(HttpStatus.OK).body(new Response("note pinned", 200));
+		}
+		return ResponseEntity.status(HttpStatus.CREATED).body(new Response("note unpinned", 400));
+	}
 	
 }
