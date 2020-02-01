@@ -167,7 +167,21 @@ public class Noteservice implements INoteService{
 			nrepo.saveOrUpdate(fetchedNote);
 			return;
 		}
-		throw new ReminderException("Opps...Remainder already set!", 502);
+		throw new ReminderException("Reminder already set!", 502);
+	}
+	@Override
+	public void removeNoteReminder(String token, long noteId) {
+		// authenticate user
+		authenticatedUser(token);
+		// validate note
+		Note fetchedNote = verifiedNote(noteId);
+		if (fetchedNote.getRemainderDate() != null) {
+			fetchedNote.setRemainderDate(null);
+			fetchedNote.setUpdatedDate(LocalDateTime.now());
+			nrepo.saveOrUpdate(fetchedNote);
+			return;
+		}
+		throw new ReminderException("Reminder already removed!", 502);
 	}
 
 }

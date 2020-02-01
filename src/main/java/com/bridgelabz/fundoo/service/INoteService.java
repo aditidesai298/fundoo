@@ -25,5 +25,7 @@ public interface INoteService {
 	public boolean trashNote(long noteId, String token);
 
 	public void setNoteReminder(String token, long noteId, ReminderDto remainderDTO);
+	
+	public void removeNoteReminder(String token, long noteId);
 
 }
