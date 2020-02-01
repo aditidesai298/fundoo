@@ -117,7 +117,7 @@ public class UserService implements IUserService {
 		String passwordUpdateBodyContent = "Login Details \n" + "UserId : " + updatePasswordInformation.getEmailId()
 				+ "\nPassword : " + updatePasswordInformation.getPassword();
 		String loginString = "\nClick on the link to login\n";
-		String loginLink = "http://localhost:8081" + environment.getProperty("server.port") + "/user/login";
+		String loginLink = "http://localhost:" + environment.getProperty("server.port") + "/user/login";
 		return passwordUpdateBodyContent + loginString + loginLink;
 	}
 
