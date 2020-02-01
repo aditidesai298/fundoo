@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bridgelabz.fundoo.model.Note;
 import com.bridgelabz.fundoo.model.NoteDto;
+import com.bridgelabz.fundoo.model.ReminderDto;
 import com.bridgelabz.fundoo.response.Response;
 import com.bridgelabz.fundoo.service.INoteService;
 
@@ -33,7 +34,7 @@ public class NoteController {
 	@Autowired
 	private INoteService nService;
 
-	@ApiOperation(value = "To create a new note for user")
+	@ApiOperation(value = "To create a new note for a user")
 	@ApiResponses(value = { @ApiResponse(code = 201, message = "Note created!"),
 			@ApiResponse(code = 400, message = "Error creating note") })
 	@PostMapping("create")
@@ -76,7 +77,7 @@ public class NoteController {
 				.body(new Response("Error updating note  ", 400));
 	}
 	
-	@ApiOperation(value = "fetch all notes for valid user")
+	@ApiOperation(value = "To fetch all notes of a user")
 	@ApiResponses(value = { 
 			@ApiResponse(code = 200, message = "Notes are"),
 			@ApiResponse(code = 401, message = "Authorization failed!"),
@@ -91,7 +92,7 @@ public class NoteController {
 				.body(new Response("Error fetching notes", 400));
 	}
 	
-	@ApiOperation(value = "archive an existing note for valid user")
+	@ApiOperation(value = "To archive a note for a user")
 	@ApiResponses(value = { 
 			@ApiResponse(code = 200, message = "note archived!"),	
 			@ApiResponse(code = 300, message = "Note not found"),
@@ -107,7 +108,7 @@ public class NoteController {
 				.body(new Response("Already archived", 400));
 	}
 	
-	@ApiOperation(value = "pin/unpin operation of existing note for valid user")
+	@ApiOperation(value = "To pin/unpin a note for a user")
 	@PatchMapping("{id}/pin")
 	public ResponseEntity<Response> pinNote(@PathVariable("id") long noteId, @RequestHeader("token") String token) {
 		if (nService.isPinnedNote(noteId, token)) {
@@ -116,7 +117,7 @@ public class NoteController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(new Response("note unpinned", 400));
 	}
 	
-	@ApiOperation(value = "change color of a note for valid user")
+	@ApiOperation(value = "To change the color of a note for a user")
 	
 	@PostMapping("{id}/colour")
 	public ResponseEntity<Response> changeColour(@RequestHeader("token") String token, @PathVariable("id") long noteId,
@@ -125,7 +126,7 @@ public class NoteController {
 		return ResponseEntity.status(HttpStatus.OK).body(new Response("color changed",200));
 	}
 	
-	@ApiOperation(value = "trash operation for an existing note for valid user")
+	@ApiOperation(value = "To trash the note of a user")
 
 	@DeleteMapping("{id}/trash")
 	public ResponseEntity<Response> trashNote(@PathVariable("id") long noteId, @RequestHeader("token") String token) {
@@ -134,6 +135,15 @@ public class NoteController {
 		}
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 				.body(new Response("Already trashed!", 400));
+	}
+	
+	@ApiOperation(value = "To set a reminder for a note of a user")
+	@PutMapping("{id}/reminder/add")
+	public ResponseEntity<Response> setReminder(@RequestHeader("token") String token, @PathVariable("id") long noteId,
+			@RequestBody ReminderDto reminderDTO) {
+		nService.setNoteReminder(token, noteId, reminderDTO);
+		return ResponseEntity.status(HttpStatus.CREATED)
+				.body(new Response("Reminder created",200));
 	}
 	
 }
