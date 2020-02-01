@@ -125,4 +125,15 @@ public class NoteController {
 		return ResponseEntity.status(HttpStatus.OK).body(new Response("color changed",200));
 	}
 	
+	@ApiOperation(value = "trash operation for an existing note for valid user")
+
+	@DeleteMapping("{id}/trash")
+	public ResponseEntity<Response> trashNote(@PathVariable("id") long noteId, @RequestHeader("token") String token) {
+		if (nService.trashNote(noteId, token)) {
+			return ResponseEntity.status(HttpStatus.OK).body(new Response("note trashed", 200));
+		}
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+				.body(new Response("Opps...Already trashed!", 400));
+	}
+	
 }
