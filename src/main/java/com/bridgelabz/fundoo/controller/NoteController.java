@@ -97,7 +97,7 @@ public class NoteController {
 			@ApiResponse(code = 300, message = "Note not found"),
 			@ApiResponse(code = 400, message = "Already archived"),
 			@ApiResponse(code = 401, message = "Authorization failed")})
-	@PatchMapping("{id}/archieve")
+	@PatchMapping("{id}/archive")
 	public ResponseEntity<Response> archiveNote(@PathVariable("id") long noteId,
 			@RequestHeader("token") String token) {
 		if (nService.archiveNote(noteId, token)) {
@@ -106,5 +106,7 @@ public class NoteController {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 				.body(new Response("Already archived", 400));
 	}
+	
+
 	
 }

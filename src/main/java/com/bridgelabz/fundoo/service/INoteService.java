@@ -14,7 +14,9 @@ public interface INoteService {
 	public boolean updateNote(NoteDto noteDto, long noteId, String token);
 
 	public List<Note> getallNotes(String token);
-	
+
 	public boolean archiveNote(long noteId, String token);
+
+	public boolean isPinnedNote(long noteId, String token);
 
 }

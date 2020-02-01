@@ -106,5 +106,24 @@ public class Noteservice implements INoteService{
 		// if archived already
 		return false;
 	}
+	
+	@Override
+	public boolean isPinnedNote(long noteId, String token) {
+		// found authorized user
+		authenticatedUser(token);
+		// verified valid note
+		Note fetchedNote = verifiedNote(noteId);
+		if (!fetchedNote.isPinned()) {
+			fetchedNote.setPinned(true);
+			fetchedNote.setUpdatedDate(LocalDateTime.now());
+			nrepo.saveOrUpdate(fetchedNote);
+			return true;
+		}
+		// if pinned already
+		fetchedNote.setPinned(false);
+		fetchedNote.setUpdatedDate(LocalDateTime.now());
+		nrepo.saveOrUpdate(fetchedNote);
+		return false;
+	}
 
 }
