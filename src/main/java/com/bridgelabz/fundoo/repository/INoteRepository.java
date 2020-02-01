@@ -8,4 +8,6 @@ public interface INoteRepository {
 
 	public Note getNote(long noteId);
 
+	public boolean isDeletedNote(long noteId);
+
 }

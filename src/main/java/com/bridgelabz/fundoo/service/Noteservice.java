@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bridgelabz.fundoo.exception.AuthorizationException;
+import com.bridgelabz.fundoo.exception.NoteException;
 import com.bridgelabz.fundoo.model.Note;
 import com.bridgelabz.fundoo.model.NoteDto;
 import com.bridgelabz.fundoo.model.User;
@@ -42,6 +43,23 @@ public class Noteservice implements INoteService{
 		newNote.setColor("white");
 		fetchedUser.getNotes().add(newNote);
 		nrepo.saveOrUpdate(newNote);
+		return true;
+	}
+	private Note verifiedNote(long noteId) {
+		Note fetchedNote = nrepo.getNote(noteId);
+		if (fetchedNote != null) {
+			return fetchedNote;
+		}
+		throw new NoteException("Not not found", 300);
+	}
+	
+	@Override
+	public boolean deleteNote(long noteId, String token) {
+		// found authorized user
+		authenticatedUser(token);
+		// verified valid note
+		verifiedNote(noteId);
+		nrepo.isDeletedNote(noteId);
 		return true;
 	}
 

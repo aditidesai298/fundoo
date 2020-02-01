@@ -25,7 +25,7 @@ import com.bridgelabz.fundoo.util.JwtGenerator;
 @RequestMapping("user")
 public class UserController {
 	@Autowired
-	private IUserService userService;
+	private IUserService uService;
 
 	@Autowired
 	private JwtGenerator tk;
@@ -34,7 +34,7 @@ public class UserController {
 	public ResponseEntity<Response> registration(@RequestBody RegisterDto rdto) {
 
 		System.out.println("Inside Controller...");
-		boolean rstatus = userService.register(rdto);
+		boolean rstatus = uService.register(rdto);
 
 		if ((rstatus) == false) {
 			return ResponseEntity.status(HttpStatus.ALREADY_REPORTED).body(new Response("user already exist", 400));
@@ -46,7 +46,7 @@ public class UserController {
 	@GetMapping("verification/{token}")
 	public ResponseEntity<Response> verifyRegistration(@PathVariable("token") String token) {
 
-		if (userService.isVerified(token)) {
+		if (uService.isVerified(token)) {
 			return ResponseEntity.status(HttpStatus.ACCEPTED).body(new Response("verified sucessfully.", 200));
 		}
 		return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(new Response("not verified", 400));
@@ -56,7 +56,7 @@ public class UserController {
 	@PostMapping("/login")
 	public ResponseEntity<LoginResponse> login(@RequestBody LoginDto dto) {
 
-		User userInformation = userService.login(dto);
+		User userInformation = uService.login(dto);
 
 		if (userInformation != null) {
 			String token = tk.generateToken(userInformation.getId());
@@ -72,7 +72,7 @@ public class UserController {
 
 	@PostMapping("forgotPassword")
 	public ResponseEntity<Response> forgotPassword(@RequestParam("email") String email) {
-		boolean fetchedUserStatus = userService.is_User_exists(email);
+		boolean fetchedUserStatus = uService.is_User_exists(email);
 		if (fetchedUserStatus) {
 			return ResponseEntity.status(HttpStatus.FOUND).body(new Response("found user", 302));
 		}
@@ -82,7 +82,7 @@ public class UserController {
 	@PutMapping("updatePassword/{token}")
 	public ResponseEntity<Response> updatePassword(@PathVariable("token") String token,
 			@RequestBody() UpdatePassDto upadatePassword) {
-		boolean updationStatus = userService.updatePassword(upadatePassword, token);
+		boolean updationStatus = uService.updatePassword(upadatePassword, token);
 		if (updationStatus) {
 			return ResponseEntity.status(HttpStatus.OK).body(new Response("updated sucessfully", 200));
 		}

@@ -33,5 +33,15 @@ public class NoteRepository implements INoteRepository {
 		query.setParameter("id", noteId);
 		return (Note) query.uniqueResult();
 	}
+	
+	@Override
+	@Transactional
+	public boolean isDeletedNote(long noteId) {
+		Session session = entityManager.unwrap(Session.class);
+		Query query = session.createQuery("DELETE FROM Note WHERE noteId=:id");
+		query.setParameter("id", noteId);
+		query.executeUpdate();
+		return true;
+	}
 
 }

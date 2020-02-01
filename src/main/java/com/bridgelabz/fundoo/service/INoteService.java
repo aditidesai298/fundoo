@@ -6,4 +6,6 @@ public interface INoteService {
 
 	public boolean createNote(NoteDto noteDto, String token);
 
+	public boolean deleteNote(long noteId, String token);
+
 }
