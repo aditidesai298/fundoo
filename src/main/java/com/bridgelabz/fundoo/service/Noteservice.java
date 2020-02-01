@@ -110,7 +110,7 @@ public class Noteservice implements INoteService{
 	}
 	
 	@Override
-	public boolean isPinnedNote(long noteId, String token) {
+	public boolean pinNote(long noteId, String token) {
 		// found authorized user
 		authenticatedUser(token);
 		// verified valid note
@@ -156,7 +156,7 @@ public class Noteservice implements INoteService{
 	}
 	
 	@Override
-	public void setNoteReminder(String token, long noteId, ReminderDto remainderDTO) {
+	public void addReminder(String token, long noteId, ReminderDto remainderDTO) {
 		// authenticate user
 		authenticatedUser(token);
 		// validate note
@@ -170,7 +170,7 @@ public class Noteservice implements INoteService{
 		throw new ReminderException("Reminder already set!", 502);
 	}
 	@Override
-	public void removeNoteReminder(String token, long noteId) {
+	public void deleteReminder(String token, long noteId) {
 		// authenticate user
 		authenticatedUser(token);
 		// validate note

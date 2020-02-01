@@ -18,14 +18,14 @@ public interface INoteService {
 
 	public boolean archiveNote(long noteId, String token);
 
-	public boolean isPinnedNote(long noteId, String token);
+	public boolean pinNote(long noteId, String token);
 
 	public void changeColour(String token, long noteId, String noteColor);
 
 	public boolean trashNote(long noteId, String token);
 
-	public void setNoteReminder(String token, long noteId, ReminderDto remainderDTO);
+	public void addReminder(String token, long noteId, ReminderDto remainderDTO);
 	
-	public void removeNoteReminder(String token, long noteId);
+	public void deleteReminder(String token, long noteId);
 
 }

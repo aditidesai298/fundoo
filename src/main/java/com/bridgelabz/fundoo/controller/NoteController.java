@@ -24,8 +24,6 @@ import com.bridgelabz.fundoo.response.Response;
 import com.bridgelabz.fundoo.service.INoteService;
 
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 
 @RestController
 @RequestMapping("note")
@@ -35,8 +33,7 @@ public class NoteController {
 	private INoteService nService;
 
 	@ApiOperation(value = "To create a new note for a user")
-	@ApiResponses(value = { @ApiResponse(code = 201, message = "Note created!"),
-			@ApiResponse(code = 400, message = "Error creating note") })
+
 	@PostMapping("create")
 	public ResponseEntity<Response> createNote(@RequestBody NoteDto nDto, @RequestHeader("token") String token) {
 		if (nService.createNote(nDto, token)) {
@@ -44,88 +41,68 @@ public class NoteController {
 		}
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response("Error creating note", 400));
 	}
-	
+
 	@ApiOperation(value = "To delete an existing note")
-	@ApiResponses(value = { 
-			@ApiResponse(code = 200, message = "Note deleted!"),	
-			@ApiResponse(code = 300, message = "Note not found"),
-			@ApiResponse(code = 400, message = "Error deleting note"),
-			@ApiResponse(code = 401, message = "Authorization failed")})
+
 	@DeleteMapping("{id}/delete")
 	public ResponseEntity<Response> deleteNote(@PathVariable("id") long noteId, @RequestHeader("token") String token) {
 		if (nService.deleteNote(noteId, token)) {
 			return ResponseEntity.status(HttpStatus.OK).body(new Response("Note deleted! ", 200));
 		}
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-				.body(new Response("Error deleting note ", 400));
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response("Error deleting note ", 400));
 
 	}
-	
+
 	@ApiOperation(value = "To update an existing note")
-	@ApiResponses(value = { 
-			@ApiResponse(code = 200, message = "Note updated!"),	
-			@ApiResponse(code = 300, message = "Note not found"),
-			@ApiResponse(code = 400, message = "Error updating note"),
-			@ApiResponse(code = 401, message = "Authorization failed")})
+
 	@PutMapping("update")
 	public ResponseEntity<Response> updateNote(@RequestBody NoteDto noteDto, @RequestParam("id") long noteId,
 			@RequestHeader("token") String token) {
 		if (nService.updateNote(noteDto, noteId, token)) {
 			return ResponseEntity.status(HttpStatus.OK).body(new Response("Note updated! ", 200));
 		}
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-				.body(new Response("Error updating note  ", 400));
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response("Error updating note  ", 400));
 	}
-	
+
 	@ApiOperation(value = "To fetch all notes of a user")
-	@ApiResponses(value = { 
-			@ApiResponse(code = 200, message = "Notes are"),
-			@ApiResponse(code = 401, message = "Authorization failed!"),
-			@ApiResponse(code = 404, message = "No notes Found")})
+
 	@GetMapping("fetch/notes")
 	public ResponseEntity<Response> fetchNotes(@RequestHeader("token") String token) {
 		List<Note> notes = nService.getallNotes(token);
 		if (!notes.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.OK).body(new Response("Notes are", 200, notes));
 		}
-		return ResponseEntity.status(HttpStatus.NOT_FOUND)
-				.body(new Response("Error fetching notes", 400));
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Error fetching notes", 400));
 	}
-	
-	@ApiOperation(value = "To archive a note for a user")
-	@ApiResponses(value = { 
-			@ApiResponse(code = 200, message = "note archived!"),	
-			@ApiResponse(code = 300, message = "Note not found"),
-			@ApiResponse(code = 400, message = "Already archived"),
-			@ApiResponse(code = 401, message = "Authorization failed")})
+
+	@ApiOperation(value = "To archive a note of a user")
+
 	@PatchMapping("{id}/archive")
-	public ResponseEntity<Response> archiveNote(@PathVariable("id") long noteId,
-			@RequestHeader("token") String token) {
+	public ResponseEntity<Response> archiveNote(@PathVariable("id") long noteId, @RequestHeader("token") String token) {
 		if (nService.archiveNote(noteId, token)) {
 			return ResponseEntity.status(HttpStatus.OK).body(new Response("note archived", 200));
 		}
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-				.body(new Response("Already archived", 400));
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response("Already archived", 400));
 	}
-	
-	@ApiOperation(value = "To pin/unpin a note for a user")
+
+	@ApiOperation(value = "To pin/unpin a note of a user")
 	@PatchMapping("{id}/pin")
 	public ResponseEntity<Response> pinNote(@PathVariable("id") long noteId, @RequestHeader("token") String token) {
-		if (nService.isPinnedNote(noteId, token)) {
+		if (nService.pinNote(noteId, token)) {
 			return ResponseEntity.status(HttpStatus.OK).body(new Response("note pinned", 200));
 		}
 		return ResponseEntity.status(HttpStatus.CREATED).body(new Response("note unpinned", 400));
 	}
-	
-	@ApiOperation(value = "To change the color of a note for a user")
-	
+
+	@ApiOperation(value = "To change the color of a note of a user")
+
 	@PostMapping("{id}/colour")
 	public ResponseEntity<Response> changeColour(@RequestHeader("token") String token, @PathVariable("id") long noteId,
 			@RequestParam("color") String noteColour) {
 		nService.changeColour(token, noteId, noteColour);
-		return ResponseEntity.status(HttpStatus.OK).body(new Response("color changed",200));
+		return ResponseEntity.status(HttpStatus.OK).body(new Response("color changed", 200));
 	}
-	
+
 	@ApiOperation(value = "To trash the note of a user")
 
 	@DeleteMapping("{id}/trash")
@@ -133,17 +110,25 @@ public class NoteController {
 		if (nService.trashNote(noteId, token)) {
 			return ResponseEntity.status(HttpStatus.OK).body(new Response("note trashed", 200));
 		}
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-				.body(new Response("Already trashed!", 400));
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response("Already trashed!", 400));
 	}
-	
-	@ApiOperation(value = "To set a reminder for a note of a user")
+
+	@ApiOperation(value = "To set a reminder for a note by a user")
 	@PutMapping("{id}/reminder/add")
 	public ResponseEntity<Response> setReminder(@RequestHeader("token") String token, @PathVariable("id") long noteId,
 			@RequestBody ReminderDto reminderDTO) {
-		nService.setNoteReminder(token, noteId, reminderDTO);
-		return ResponseEntity.status(HttpStatus.CREATED)
-				.body(new Response("Reminder created",200));
+		nService.addReminder(token, noteId, reminderDTO);
+		return ResponseEntity.status(HttpStatus.CREATED).body(new Response("Reminder created", 200));
 	}
 	
+	@ApiOperation(value = "To delete reminder of a note by a user")
+
+	@DeleteMapping("{id}/reminder/delete")
+	public ResponseEntity<Response> removeReminder(@RequestHeader("token") String token,
+			@PathVariable("id") long noteId) {
+		nService.deleteReminder(token, noteId);
+		return ResponseEntity.status(HttpStatus.CREATED)
+				.body(new Response("Reminder removed!", 200));
+	}
+
 }
