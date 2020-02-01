@@ -62,5 +62,17 @@ public class Noteservice implements INoteService{
 		nrepo.isDeletedNote(noteId);
 		return true;
 	}
+	
+	@Override
+	public boolean updateNote(NoteDto noteDto, long noteId, String token) {
+		// found authorized user
+		authenticatedUser(token);
+		// verified valid note
+		Note fetchedNote = verifiedNote(noteId);
+		BeanUtils.copyProperties(noteDto, fetchedNote);
+		fetchedNote.setUpdatedDate(LocalDateTime.now());
+		nrepo.saveOrUpdate(fetchedNote);
+		return true;
+	}
 
 }
