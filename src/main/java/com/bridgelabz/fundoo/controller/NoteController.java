@@ -93,15 +93,15 @@ public class NoteController {
 	
 	@ApiOperation(value = "archive an existing note for valid user")
 	@ApiResponses(value = { 
-			@ApiResponse(code = 200, message = "note archived"),	
-			@ApiResponse(code = 300, message = "Opps...Note not found!"),
-			@ApiResponse(code = 400, message = "Opps...Already archived!"),
-			@ApiResponse(code = 401, message = "Opps...Authorization failed!")})
+			@ApiResponse(code = 200, message = "note archived!"),	
+			@ApiResponse(code = 300, message = "Note not found"),
+			@ApiResponse(code = 400, message = "Already archived"),
+			@ApiResponse(code = 401, message = "Authorization failed")})
 	@PatchMapping("{id}/archieve")
-	public ResponseEntity<Response> archieveNote(@PathVariable("id") long noteId,
+	public ResponseEntity<Response> archiveNote(@PathVariable("id") long noteId,
 			@RequestHeader("token") String token) {
 		if (nService.archiveNote(noteId, token)) {
-			return ResponseEntity.status(HttpStatus.OK).body(new Response("note archieved", 200));
+			return ResponseEntity.status(HttpStatus.OK).body(new Response("note archived", 200));
 		}
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 				.body(new Response("Already archived", 400));
