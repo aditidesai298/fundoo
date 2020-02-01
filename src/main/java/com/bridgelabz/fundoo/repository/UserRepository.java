@@ -61,4 +61,13 @@ public class UserRepository implements IUserRepository {
 		query.executeUpdate();
 		return true;
 	}
+	
+	@Override
+	@Transactional
+	public User getUser(Long id) {
+		Session session = entityManager.unwrap(Session.class);
+		Query query = session.createQuery(" FROM User WHERE id=:id");
+		query.setParameter("id", id);
+		return (User) query.uniqueResult();
+	}
 }

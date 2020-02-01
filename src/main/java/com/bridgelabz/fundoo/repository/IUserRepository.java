@@ -13,4 +13,6 @@ public interface IUserRepository {
 
 	public boolean updatePassword(UpdatePassDto updatePasswordinformation, long id);
 
+	public User getUser(Long id);
+
 }

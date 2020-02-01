@@ -26,7 +26,7 @@ public class Note {
 	private String color;
 	private LocalDateTime createdDate;
 	private LocalDateTime updatedDate;
-	private LocalDateTime remainderDate;
+	private LocalDateTime reminderDate;
 
 
 	public long getId() {
@@ -115,11 +115,11 @@ public class Note {
 
 	
 	public LocalDateTime getRemainderDate() {
-		return remainderDate;
+		return reminderDate;
 	}
 
 	public void setRemainderDate(LocalDateTime remainderDate) {
-		this.remainderDate = remainderDate;
+		this.reminderDate = remainderDate;
 	}
 
 	
@@ -127,7 +127,7 @@ public class Note {
 	public String toString() {
 		return "Note [noteId=" + noteId + ", title=" + title + ", description=" + description + ", isArchived="
 				+ isArchived + ", isPinned=" + isPinned + ", isTrashed=" + isTrashed + ", color=" + color
-				+ ", createdDate=" + createdDate + ", updatedDate=" + updatedDate + ", remainderDate=" + remainderDate
+				+ ", createdDate=" + createdDate + ", updatedDate=" + updatedDate + ", remainderDate=" + reminderDate
 				+ "]";
 	}
 
