@@ -136,5 +136,21 @@ public class Noteservice implements INoteService{
 		fetchedNote.setUpdatedDate(LocalDateTime.now());
 		nrepo.saveOrUpdate(fetchedNote);
 	}
+	
+	@Override
+	public boolean trashNote(long noteId, String token) {
+		// found authorized user
+		authenticatedUser(token);
+		// verified valid note
+		Note fetchedNote = verifiedNote(noteId);
+		if (!fetchedNote.isTrashed()) {
+			fetchedNote.setTrashed(true);
+			fetchedNote.setUpdatedDate(LocalDateTime.now());
+			nrepo.saveOrUpdate(fetchedNote);
+			return true;
+		}
+		// if trashed already
+		return false;
+	}
 
 }

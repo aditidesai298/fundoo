@@ -20,5 +20,7 @@ public interface INoteService {
 	public boolean isPinnedNote(long noteId, String token);
 	
 	public void changeColour(String token, long noteId, String noteColor);
+	
+	public boolean trashNote(long noteId, String token);
 
 }
