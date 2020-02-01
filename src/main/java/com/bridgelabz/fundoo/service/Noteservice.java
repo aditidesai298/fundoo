@@ -9,8 +9,10 @@ import org.springframework.stereotype.Service;
 
 import com.bridgelabz.fundoo.exception.AuthorizationException;
 import com.bridgelabz.fundoo.exception.NoteException;
+import com.bridgelabz.fundoo.exception.ReminderException;
 import com.bridgelabz.fundoo.model.Note;
 import com.bridgelabz.fundoo.model.NoteDto;
+import com.bridgelabz.fundoo.model.ReminderDto;
 import com.bridgelabz.fundoo.model.User;
 import com.bridgelabz.fundoo.repository.INoteRepository;
 import com.bridgelabz.fundoo.repository.IUserRepository;
@@ -151,6 +153,21 @@ public class Noteservice implements INoteService{
 		}
 		// if trashed already
 		return false;
+	}
+	
+	@Override
+	public void setNoteReminder(String token, long noteId, ReminderDto remainderDTO) {
+		// authenticate user
+		authenticatedUser(token);
+		// validate note
+		Note fetchedNote = verifiedNote(noteId);
+		if (fetchedNote.getRemainderDate() == null) {
+			fetchedNote.setUpdatedDate(LocalDateTime.now());
+			fetchedNote.setRemainderDate(remainderDTO.getRemainder());
+			nrepo.saveOrUpdate(fetchedNote);
+			return;
+		}
+		throw new ReminderException("Opps...Remainder already set!", 502);
 	}
 
 }
