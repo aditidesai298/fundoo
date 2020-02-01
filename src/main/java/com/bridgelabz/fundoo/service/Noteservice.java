@@ -89,5 +89,22 @@ public class Noteservice implements INoteService{
 		// empty list
 		return fetchedNotes;
 	}
+	
+	@Override
+	public boolean archiveNote(long noteId, String token) {
+		// found authorized user
+		authenticatedUser(token);
+		// verified valid note
+		Note fetchedNote = verifiedNote(noteId);
+		// fetched note is not archived
+		if (!fetchedNote.isArchived()) {
+			fetchedNote.setArchived(true);
+			fetchedNote.setUpdatedDate(LocalDateTime.now());
+			nrepo.saveOrUpdate(fetchedNote);
+			return true;
+		}
+		// if archived already
+		return false;
+	}
 
 }
