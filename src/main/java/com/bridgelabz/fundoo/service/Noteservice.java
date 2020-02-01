@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.bridgelabz.fundoo.exception.AuthorizationException;
 import com.bridgelabz.fundoo.model.Note;
@@ -12,7 +13,7 @@ import com.bridgelabz.fundoo.model.User;
 import com.bridgelabz.fundoo.repository.INoteRepository;
 import com.bridgelabz.fundoo.repository.IUserRepository;
 import com.bridgelabz.fundoo.util.JwtGenerator;
-
+@Service
 public class Noteservice implements INoteService{
 	
 	
