@@ -120,15 +120,14 @@ public class NoteController {
 		nService.addReminder(token, noteId, reminderDTO);
 		return ResponseEntity.status(HttpStatus.CREATED).body(new Response("Reminder created", 200));
 	}
-	
+
 	@ApiOperation(value = "To delete reminder of a note by a user")
 
 	@DeleteMapping("{id}/reminder/delete")
 	public ResponseEntity<Response> removeReminder(@RequestHeader("token") String token,
 			@PathVariable("id") long noteId) {
 		nService.deleteReminder(token, noteId);
-		return ResponseEntity.status(HttpStatus.CREATED)
-				.body(new Response("Reminder removed!", 200));
+		return ResponseEntity.status(HttpStatus.CREATED).body(new Response("Reminder removed!", 200));
 	}
 
 }

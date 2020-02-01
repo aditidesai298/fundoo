@@ -3,6 +3,8 @@ package com.bridgelabz.fundoo.service;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -182,6 +184,16 @@ public class Noteservice implements INoteService{
 			return;
 		}
 		throw new ReminderException("Reminder already removed!", 502);
+	}
+	
+	@Transactional
+	@Override
+	public boolean restored(String token, Long noteId) {
+		Long userId = (long) tokenobj.decodeToken(token);
+		if (nrepo.setRestored(userId, noteId)) {
+			return true;
+		}
+		return false;
 	}
 
 }

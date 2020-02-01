@@ -27,5 +27,7 @@ public interface INoteService {
 	public void addReminder(String token, long noteId, ReminderDto remainderDTO);
 	
 	public void deleteReminder(String token, long noteId);
+	
+	public boolean restored(String token, Long noteId);
 
 }

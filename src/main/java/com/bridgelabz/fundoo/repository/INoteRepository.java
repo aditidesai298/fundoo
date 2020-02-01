@@ -13,5 +13,7 @@ public interface INoteRepository {
 	public boolean isDeletedNote(long noteId);
 
 	public List<Note> getAllNotes(long userId);
+	
+	public boolean setRestored(Long userId, Long noteId);
 
 }
