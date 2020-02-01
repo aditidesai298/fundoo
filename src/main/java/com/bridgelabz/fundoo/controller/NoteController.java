@@ -1,9 +1,12 @@
 package com.bridgelabz.fundoo.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bridgelabz.fundoo.model.Note;
 import com.bridgelabz.fundoo.model.NoteDto;
 import com.bridgelabz.fundoo.response.Response;
 import com.bridgelabz.fundoo.service.INoteService;
@@ -69,6 +73,21 @@ public class NoteController {
 		}
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 				.body(new Response("Error updating note  ", 400));
+	}
+	
+	@ApiOperation(value = "fetch all notes for valid user")
+	@ApiResponses(value = { 
+			@ApiResponse(code = 200, message = "Notes are"),
+			@ApiResponse(code = 401, message = "Authorization failed!"),
+			@ApiResponse(code = 404, message = "No notes Found")})
+	@GetMapping("fetch/notes")
+	public ResponseEntity<Response> fetchNotes(@RequestHeader("token") String token) {
+		List<Note> notes = nService.getallNotes(token);
+		if (!notes.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.OK).body(new Response("Notes are", 200, notes));
+		}
+		return ResponseEntity.status(HttpStatus.NOT_FOUND)
+				.body(new Response("Error fetching notes", 400));
 	}
 	
 }

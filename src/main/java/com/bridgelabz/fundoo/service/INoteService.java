@@ -1,5 +1,8 @@
 package com.bridgelabz.fundoo.service;
 
+import java.util.List;
+
+import com.bridgelabz.fundoo.model.Note;
 import com.bridgelabz.fundoo.model.NoteDto;
 
 public interface INoteService {
@@ -9,5 +12,7 @@ public interface INoteService {
 	public boolean deleteNote(long noteId, String token);
 
 	public boolean updateNote(NoteDto noteDto, long noteId, String token);
+
+	public List<Note> getallNotes(String token);
 
 }

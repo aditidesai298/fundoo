@@ -1,6 +1,7 @@
 package com.bridgelabz.fundoo.service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import com.bridgelabz.fundoo.model.User;
 import com.bridgelabz.fundoo.repository.INoteRepository;
 import com.bridgelabz.fundoo.repository.IUserRepository;
 import com.bridgelabz.fundoo.util.JwtGenerator;
+
 @Service
 public class Noteservice implements INoteService{
 	
@@ -73,6 +75,19 @@ public class Noteservice implements INoteService{
 		fetchedNote.setUpdatedDate(LocalDateTime.now());
 		nrepo.saveOrUpdate(fetchedNote);
 		return true;
+	}
+	
+	@Override
+	public List<Note> getallNotes(String token) {
+		// found authorized user
+		User fetchedUser = authenticatedUser(token);
+		// note found
+		List<Note> fetchedNotes = nrepo.getAllNotes(fetchedUser.getId());
+		if (!fetchedNotes.isEmpty()) {
+			return fetchedNotes;
+		}
+		// empty list
+		return fetchedNotes;
 	}
 
 }

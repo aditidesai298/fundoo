@@ -18,11 +18,5 @@ public class SwaggerConfig {
 		return new Docket(DocumentationType.SWAGGER_2).select()
 				.apis(RequestHandlerSelectors.basePackage("com.bridgelabz.fundoo.controller")).paths(regex("/.*"))
 				.build();
-//				.apiInfo(new ApiInfo("Fundoo API",
-//						"Fundoo API for users where they can login, update their password and register. The can also create notes and perform operations on them for a registered user.",
-//						"1.0", "  ->  https://github.com/aditidesai298/fundoo",
-//						new Contact("Aditi Desai", "https://github.com/aditidesai298/fundoo",
-//								"aditi.desai298@gmail.com"),
-//						"Apache-2.0", "http://www.apache.org/licenses/LICENSE-2.0",null));
 	}
 }
