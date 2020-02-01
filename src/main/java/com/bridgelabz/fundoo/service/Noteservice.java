@@ -125,5 +125,16 @@ public class Noteservice implements INoteService{
 		nrepo.saveOrUpdate(fetchedNote);
 		return false;
 	}
+	
+	@Override
+	public void changeColour(String token, long noteId, String noteColour) {
+		// authenticate user
+		authenticatedUser(token);
+		// validate note
+		Note fetchedNote = verifiedNote(noteId);
+		fetchedNote.setColor(noteColour);
+		fetchedNote.setUpdatedDate(LocalDateTime.now());
+		nrepo.saveOrUpdate(fetchedNote);
+	}
 
 }
