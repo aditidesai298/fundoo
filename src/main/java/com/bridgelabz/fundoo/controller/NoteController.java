@@ -116,4 +116,13 @@ public class NoteController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(new Response("note unpinned", 400));
 	}
 	
+	@ApiOperation(value = "change color of a note for valid user")
+	
+	@PostMapping("{id}/colour")
+	public ResponseEntity<Response> changeColour(@RequestHeader("token") String token, @PathVariable("id") long noteId,
+			@RequestParam("color") String noteColour) {
+		nService.changeColour(token, noteId, noteColour);
+		return ResponseEntity.status(HttpStatus.OK).body(new Response("color changed",200));
+	}
+	
 }

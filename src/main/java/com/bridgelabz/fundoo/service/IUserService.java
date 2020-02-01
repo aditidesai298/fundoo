@@ -17,6 +17,6 @@ public interface IUserService {
 
 	public boolean updatePassword(UpdatePassDto updatePasswordInformation, String token);
 
-	public void changeColour(String token, long noteId, String noteColor);
+	
 
 }
