@@ -31,7 +31,7 @@ public class NoteRepository implements INoteRepository {
 	@Transactional
 	public Note getNote(long nId) {
 		Session session = entityManager.unwrap(Session.class);
-		Query query = session.createQuery("FROM Note WHERE noteId=:id");
+		Query query = session.createQuery("FROM Note WHERE id=:id");
 		query.setParameter("id", nId);
 		return (Note) query.uniqueResult();
 	}
@@ -40,7 +40,7 @@ public class NoteRepository implements INoteRepository {
 	@Transactional
 	public boolean isDeletedNote(long nId) {
 		Session session = entityManager.unwrap(Session.class);
-		Query query = session.createQuery("DELETE FROM Note WHERE noteId=:id");
+		Query query = session.createQuery("DELETE FROM Note WHERE id=:id");
 		query.setParameter("id", nId);
 		query.executeUpdate();
 		return true;
@@ -55,17 +55,17 @@ public class NoteRepository implements INoteRepository {
 
 	}
 	@Override
-	public List<Note> getAllTrashedNotes(long uId) {
+	public List<Note> getTrashed(long uId) {
 		Session session = entityManager.unwrap(Session.class);
-		Query query = session.createQuery("FROM Note WHERE user_id=:id and is_trashed=true");
+		Query query = session.createQuery("FROM Note WHERE id=:id and is_trashed=true");
 				query.setParameter("id", uId);
 		return query.getResultList();
 	}
 	
 	@Override
-	public List<Note> getAllPinnedNotes(long uId) {
+	public List<Note> getPinned(long uId) {
 		Session session = entityManager.unwrap(Session.class);
-		Query query = session.createQuery("FROM Note WHERE user_id=:id and is_pinned=true");
+		Query query = session.createQuery("FROM Note WHERE id=:id and is_pinned=true");
 				query.setParameter("id", uId);
 		return query.getResultList();
 	}

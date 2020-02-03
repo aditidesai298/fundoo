@@ -30,6 +30,8 @@ public interface INoteService {
 	
 	public boolean restored(String token, Long noteid);
 	
-	public List<Note> getAllTrashedNotes(String token);
+	public List<Note> getTrashed(String token);
+	
+	public List<Note> getPinned(String token);
 
 }
