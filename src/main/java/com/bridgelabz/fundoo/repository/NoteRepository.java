@@ -46,6 +46,7 @@ public class NoteRepository implements INoteRepository {
 		return true;
 	}
 	@Override
+	@Transactional
 	public List<Note> getAllNotes(long uId) {
 		Session session = entityManager.unwrap(Session.class);
 		Query query = session.createQuery("FROM Note WHERE id=:id and is_trashed=false and is_archived=false");

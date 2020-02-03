@@ -44,6 +44,18 @@ public class User {
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "id")
 	private List<Note> notes;
+	
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "user_id")
+	private List<Label> labels;
+
+	public List<Label> getLabels() {
+		return labels;
+	}
+
+	public void setLabels(List<Label> labels) {
+		this.labels = labels;
+	}
 
 	public List<Note> getNotes() {
 		return notes;

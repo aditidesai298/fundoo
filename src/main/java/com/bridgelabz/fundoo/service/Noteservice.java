@@ -82,6 +82,7 @@ public class Noteservice implements INoteService{
 	}
 	
 	@Override
+	@Transactional
 	public List<Note> getallNotes(String token) {
 		// found authorized user
 		User fetchedUser = authenticatedUser(token);
@@ -218,10 +219,10 @@ public class Noteservice implements INoteService{
 	public List<Note> getPinned(String token) {
 		
 		List<Note> fetchedPinnedNotes = nrepo.getPinned(authenticatedUser(token).getId());
-		if (!fetchedPinnedNotes.isEmpty()) {
-			return fetchedPinnedNotes;
-		}
-		
+//		if (!fetchedPinnedNotes.isEmpty()) {
+//			return fetchedPinnedNotes;
+//		}
+//		
 		return fetchedPinnedNotes;
 	}
 
