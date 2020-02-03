@@ -138,5 +138,18 @@ public class NoteController {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response( "Note is Trashed",400));
 				
 	}
+	
+	@ApiOperation(value = "fetch all trashed notes for valid user")
+
+	@GetMapping("fetch/notes/trashed")
+	public ResponseEntity<Response> fetchTrashedNotes(@RequestHeader("token") String token) {
+		List<Note> trashedNotes = nService.getAllTrashedNotes(token);
+		if (!trashedNotes.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(new Response("Trashed notes are", 200, trashedNotes));
+		}
+		return ResponseEntity.status(HttpStatus.NOT_FOUND)
+				.body(new Response("note not found", 400));
+	}
 
 }

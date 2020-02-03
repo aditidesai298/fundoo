@@ -29,5 +29,7 @@ public interface INoteService {
 	public void deleteReminder(String token, long noteId);
 	
 	public boolean restored(String token, Long noteid);
+	
+	public List<Note> getAllTrashedNotes(String token);
 
 }

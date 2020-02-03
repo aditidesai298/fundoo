@@ -203,5 +203,15 @@ public class Noteservice implements INoteService{
 		return false;
 	
 	}
+	@Override
+	public List<Note> getAllTrashedNotes(String token) {
+		// note found of authenticated user
+		List<Note> fetchedTrashedNotes = nrepo.getAllTrashedNotes(authenticatedUser(token).getId());
+		if (!fetchedTrashedNotes.isEmpty()) {
+			return fetchedTrashedNotes;
+		}
+		// empty list
+		return fetchedTrashedNotes;
+	}
 
 }

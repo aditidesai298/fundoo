@@ -54,6 +54,13 @@ public class NoteRepository implements INoteRepository {
 			
 
 	}
+	@Override
+	public List<Note> getAllTrashedNotes(long userId) {
+		Session session = entityManager.unwrap(Session.class);
+		Query query = session.createQuery("FROM Note WHERE user_id=:id and is_trashed=true");
+				query.setParameter("id", userId);
+		return query.getResultList();
+	}
 	
 	
 }
