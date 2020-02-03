@@ -139,7 +139,7 @@ public class NoteController {
 				
 	}
 	
-	@ApiOperation(value = "fetch all trashed notes for valid user")
+	@ApiOperation(value = "To fetch all trashed notes from user")
 
 	@GetMapping("fetch/notes/trashed")
 	public ResponseEntity<Response> fetchTrashedNotes(@RequestHeader("token") String token) {
