@@ -1,9 +1,12 @@
 package com.bridgelabz.fundoo.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bridgelabz.fundoo.model.Label;
 import com.bridgelabz.fundoo.model.LabelDto;
 import com.bridgelabz.fundoo.response.Response;
 import com.bridgelabz.fundoo.service.ILabelService;
@@ -22,10 +26,9 @@ import io.swagger.annotations.ApiOperation;
 @RestController
 @RequestMapping("/label")
 public class LabelController {
-	
+
 	@Autowired
 	private ILabelService lService;
-	
 
 	@PostMapping("create")
 	@ApiOperation(value = "To create a label")
@@ -33,8 +36,7 @@ public class LabelController {
 		lService.createLabel(token, labelDto);
 		return ResponseEntity.status(HttpStatus.CREATED).body(new Response("Label created!", 201, labelDto));
 	}
-	
-	
+
 	@PostMapping("/create/{noteId}")
 	@ApiOperation(value = "To create label and it's note")
 	public ResponseEntity<Response> createandMapLabel(@RequestHeader("token") String token,
@@ -42,7 +44,6 @@ public class LabelController {
 		lService.createLabelAndMap(token, noteId, labelDTO);
 		return ResponseEntity.status(HttpStatus.CREATED).body(new Response("label created and mapped", 201, labelDTO));
 	}
-	
 
 	@PutMapping("/edit")
 	@ApiOperation(value = "To edit name of label")
@@ -51,10 +52,9 @@ public class LabelController {
 		if (lService.editLabel(token, labelDTO, labelId)) {
 			return ResponseEntity.status(HttpStatus.OK).body(new Response("label name changed", 200));
 		}
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-				.body(new Response("New label cannot be the same", 400));
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response("New label cannot be the same", 400));
 	}
-	
+
 	@DeleteMapping("/{labelId}/delete")
 	@ApiOperation(value = "To delete a label")
 	public ResponseEntity<Response> deleteLabel(@RequestHeader("token") String token,
@@ -62,7 +62,16 @@ public class LabelController {
 		if (lService.deleteLabel(token, labelId)) {
 			return ResponseEntity.status(HttpStatus.OK).body(new Response("label deleted sucessfully", 200));
 		}
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-				.body(new Response("Cannot delete label",400));
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response("Cannot delete label", 400));
+	}
+
+	@GetMapping("/fetch/labels")
+	@ApiOperation(value = "To get all the labels from user")
+	public ResponseEntity<Response> getAllLabels(@RequestHeader("token") String token) {
+		List<Label> foundLabelList = lService.foundLabelsList(token);
+		if (!foundLabelList.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.OK).body(new Response("found labels", 200, foundLabelList));
+		}
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Opps...No labels founds", 400));
 	}
 }

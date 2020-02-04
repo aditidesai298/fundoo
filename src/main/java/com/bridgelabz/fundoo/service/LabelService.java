@@ -1,5 +1,6 @@
 package com.bridgelabz.fundoo.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
@@ -82,6 +83,11 @@ public class LabelService implements ILabelService {
 			return true;
 		}
 		throw new LabelException("Label not found", 400);
+	}
+	@Override
+	public List<Label> foundLabelsList(String token) {
+		uRepo.getUser(jwt.decodeToken(token));
+		return lRepo.getAllLabels();
 	}
 
 
