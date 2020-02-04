@@ -1,5 +1,7 @@
 package com.bridgelabz.fundoo.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -57,6 +59,27 @@ public class LabelService implements ILabelService {
 		}
 		throw new LabelException("Label already exists", 208);
 	}
-	
+	@Override
+	public boolean isLabelEdited(String token, LabelDto labelDTO, long labelId) {
+		uRepo.getUser(jwt.decodeToken(token));
+		Optional<Label> fetchedLabel = lRepo.findById(labelId);
+		if (fetchedLabel.isPresent()) {
+			if (isValidNameForEdit(fetchedLabel, labelDTO)) {
+				lRepo.updateLabelName(labelDTO.getLabelName(), fetchedLabel.get().getLabelId());
+				return true;
+			}
+			return false;
+		}
+		throw new LabelException("Label not found", 400);
+	}
+
+	private boolean isValidNameForEdit(Optional<Label> fetchedLabel, LabelDto labelDTO) {
+
+		if (lRepo.checkLabelWithDb(labelDTO.getLabelName()).isEmpty()) {
+			return !fetchedLabel.get().getLabelName().equals(labelDTO.getLabelName());
+		}
+		throw new LabelException("name with the given label already exist in your account",
+				400);
+	}
 
 }
