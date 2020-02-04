@@ -37,7 +37,8 @@ public class NoteController {
 	@PostMapping("create")
 	public ResponseEntity<Response> createNote(@RequestBody NoteDto nDto, @RequestHeader("token") String token) {
 		if (nService.createNote(nDto, token)) {
-			return ResponseEntity.status(HttpStatus.CREATED).body(new Response("Note created!", 201));
+			return ResponseEntity.status(HttpStatus.CREATED).body(new Response("Note created!", 200
+					));
 		}
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response("Error creating note", 400));
 	}

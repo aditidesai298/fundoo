@@ -3,6 +3,7 @@ package com.bridgelabz.fundoo.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -47,10 +48,21 @@ public class LabelController {
 	@ApiOperation(value = "To edit name of label")
 	public ResponseEntity<Response> editLabelName(@RequestHeader("token") String token, @RequestBody LabelDto labelDTO,
 			@RequestParam("labelId") long labelId) {
-		if (lService.isLabelEdited(token, labelDTO, labelId)) {
+		if (lService.editLabel(token, labelDTO, labelId)) {
 			return ResponseEntity.status(HttpStatus.OK).body(new Response("label name changed", 200));
 		}
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-				.body(new Response("Opps...new Label name can't be same!", 400));
+				.body(new Response("New label cannot be the same", 400));
+	}
+	
+	@DeleteMapping("/{labelId}/delete")
+	@ApiOperation(value = "To delete a label")
+	public ResponseEntity<Response> deleteLabel(@RequestHeader("token") String token,
+			@PathVariable("labelId") long labelId) {
+		if (lService.deleteLabel(token, labelId)) {
+			return ResponseEntity.status(HttpStatus.OK).body(new Response("label deleted sucessfully", 200));
+		}
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+				.body(new Response("Cannot delete label",400));
 	}
 }

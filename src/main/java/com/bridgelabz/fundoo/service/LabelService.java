@@ -28,13 +28,13 @@ public class LabelService implements ILabelService {
 	private INoteRepository nRepo;
 
 	@Override
-	public void createLabel(String token, LabelDto labelDTO) {
+	public void createLabel(String token, LabelDto lDto) {
 		User fetchedUser = uRepo.getUser(jwt.decodeToken(token));
-		Label fetchedLabel = lRepo.findOneBylabelName(labelDTO.getLabelName());
+		Label fetchedLabel = lRepo.findOneBylabelName(lDto.getLabelName());
 		
 		if (fetchedLabel == null) {
 			Label newLabel = new Label();
-			BeanUtils.copyProperties(labelDTO, newLabel);
+			BeanUtils.copyProperties(lDto, newLabel);
 			fetchedUser.getLabels().add(newLabel);
 			lRepo.save(newLabel);
 			return;
@@ -44,13 +44,13 @@ public class LabelService implements ILabelService {
 	}
 	
 	@Override
-	public boolean createLabelAndMap(String token, long noteId, LabelDto labelDTO) {
+	public boolean createLabelAndMap(String token, long noteId, LabelDto lDTO) {
 		User fetchedUser = uRepo.getUser(jwt.decodeToken(token));
 		Note fetchedNote = nRepo.getNote(noteId);
-		Label fetchedLabel = lRepo.findOneBylabelName(labelDTO.getLabelName());
+		Label fetchedLabel = lRepo.findOneBylabelName(lDTO.getLabelName());
 		if (fetchedLabel == null) {
 			Label newLabel = new Label();
-			BeanUtils.copyProperties(labelDTO, newLabel);
+			BeanUtils.copyProperties(lDTO, newLabel);
 			
 			fetchedUser.getLabels().add(newLabel);
 			fetchedNote.getLabelsList().add(newLabel);
@@ -60,12 +60,12 @@ public class LabelService implements ILabelService {
 		throw new LabelException("Label already exists", 208);
 	}
 	@Override
-	public boolean isLabelEdited(String token, LabelDto labelDTO, long labelId) {
+	public boolean editLabel(String token, LabelDto lDto, long lId) {
 		uRepo.getUser(jwt.decodeToken(token));
-		Optional<Label> fetchedLabel = lRepo.findById(labelId);
+		Optional<Label> fetchedLabel = lRepo.findById(lId);
 		if (fetchedLabel.isPresent()) {
-			if (isValidNameForEdit(fetchedLabel, labelDTO)) {
-				lRepo.updateLabelName(labelDTO.getLabelName(), fetchedLabel.get().getLabelId());
+			if (lRepo.checkLabelWithDb(lDto.getLabelName()).isEmpty()) {
+				lRepo.updateLabelName(lDto.getLabelName(), fetchedLabel.get().getLabelId());
 				return true;
 			}
 			return false;
@@ -73,13 +73,16 @@ public class LabelService implements ILabelService {
 		throw new LabelException("Label not found", 400);
 	}
 
-	private boolean isValidNameForEdit(Optional<Label> fetchedLabel, LabelDto labelDTO) {
-
-		if (lRepo.checkLabelWithDb(labelDTO.getLabelName()).isEmpty()) {
-			return !fetchedLabel.get().getLabelName().equals(labelDTO.getLabelName());
+	@Override
+	public boolean deleteLabel(String token, long lId) {
+		uRepo.getUser(jwt.decodeToken(token));
+		Optional<Label> fetchedLabel = lRepo.findById(lId);
+		if (fetchedLabel.isPresent()) {
+			lRepo.delete(fetchedLabel.get());
+			return true;
 		}
-		throw new LabelException("name with the given label already exist in your account",
-				400);
+		throw new LabelException("Label not found", 400);
 	}
+
 
 }

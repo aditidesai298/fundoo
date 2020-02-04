@@ -8,6 +8,8 @@ public interface ILabelService {
 
 	public boolean createLabelAndMap(String token, long noteId, LabelDto labelDTO);
 
-	boolean isLabelEdited(String token, LabelDto labelDTO, long labelId);
+	boolean editLabel(String token, LabelDto labelDTO, long labelId);
+
+	boolean deleteLabel(String token, long labelId);
 
 }
