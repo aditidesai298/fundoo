@@ -24,9 +24,9 @@ public class LabelController {
 	
 
 	@PostMapping("create")
-	@ApiOperation(value = "To create a label", response = Response.class)
+	@ApiOperation(value = "To create a label")
 	public ResponseEntity<Response> createLabel(@RequestHeader("token") String token, @RequestBody LabelDto labelDto) {
 		lService.createLabel(token, labelDto);
-		return ResponseEntity.status(HttpStatus.CREATED).body(new Response("label created", 201, labelDto));
+		return ResponseEntity.status(HttpStatus.CREATED).body(new Response("Label created!", 201, labelDto));
 	}
 }
