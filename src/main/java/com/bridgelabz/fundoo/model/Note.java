@@ -13,7 +13,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -35,12 +34,11 @@ public class Note {
 	private LocalDateTime updatedDate;
 	private LocalDateTime reminderDate;
 
-
-	@ManyToMany
+	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "note_label", joinColumns = { @JoinColumn(name = "n_id") }, inverseJoinColumns = {
 			@JoinColumn(name = "l_id") })
 	@JsonIgnore
-	private List<Label> labels;
+	private List<Label> labelsList;
 
 	public long getId() {
 		return n_id;
@@ -123,11 +121,11 @@ public class Note {
 	}
 
 	public List<Label> getLabelsList() {
-		return labels;
+		return labelsList;
 	}
 
 	public void setLabelsList(List<Label> labelsList) {
-		this.labels = labelsList;
+		this.labelsList = labelsList;
 	}
 
 	@Override

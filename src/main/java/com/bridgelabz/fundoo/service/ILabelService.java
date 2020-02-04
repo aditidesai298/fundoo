@@ -4,6 +4,6 @@ import com.bridgelabz.fundoo.model.LabelDto;
 
 public interface ILabelService {
 	
-	int createLabel(LabelDto labeldto, String token);
+	public void createLabel(String token, LabelDto labelDTO);
 
 }

@@ -1,24 +1,15 @@
 package com.bridgelabz.fundoo.model;
 
 public class LabelDto {
-	
-	private String labelTitle;
-	
-	public LabelDto() {
-		super();
+
+	private String labelName;
+
+	public String getLabelName() {
+		return labelName;
 	}
 
-	public LabelDto(String labelTitle) {
-		super();
-		this.labelTitle = labelTitle;
-	}
-
-	public String getLabelTitle() {
-		return labelTitle;
-	}
-
-	public void setLabelTitle(String labelTitle) {
-		this.labelTitle = labelTitle;
+	public void setLabelName(String labelName) {
+		this.labelName = labelName;
 	}
 
 }
