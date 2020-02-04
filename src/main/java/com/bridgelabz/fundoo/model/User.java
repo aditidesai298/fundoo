@@ -7,21 +7,24 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-//@Table(name="user")
+@Table(name="user")
 public class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
+	@Column(name = "u_id")
 	private long id;
 
 	private String fname;
@@ -39,24 +42,27 @@ public class User {
 
 	@Column(nullable = false)
 	private boolean isVerified;
-	
+
+	@JsonBackReference
 	@JsonIgnore
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany
 	@JoinColumn(name = "id")
 	private List<Note> notes;
-	
-	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name = "user_id")
-	private List<Label> labels;
 
-	public List<Label> getLabels() {
-		return labels;
-	}
+//	@JsonBackReference
+//	@JsonIgnore
+//	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//	@JoinColumn(name = "user_id")
+//	private List<Label> labels;
 
-	public void setLabels(List<Label> labels) {
-		this.labels = labels;
-	}
-
+//	public List<Label> getLabels() {
+//		return labels;
+//	}
+//
+//	public void setLabels(List<Label> labels) {
+//		this.labels = labels;
+//	}
+//
 	public List<Note> getNotes() {
 		return notes;
 	}
