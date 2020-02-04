@@ -34,9 +34,9 @@ public class Note {
 	private LocalDateTime updatedDate;
 	private LocalDateTime reminderDate;
 
-	@ManyToMany(cascade = CascadeType.ALL)
-	@JoinTable(name = "note_label", joinColumns = { @JoinColumn(name = "n_id") }, inverseJoinColumns = {
-			@JoinColumn(name = "l_id") })
+	@ManyToMany
+	@JoinTable(name = "note_label",
+	joinColumns = { @JoinColumn(name = "n_id") }, inverseJoinColumns = { @JoinColumn(name = "l_id") })
 	@JsonIgnore
 	private List<Label> labelsList;
 

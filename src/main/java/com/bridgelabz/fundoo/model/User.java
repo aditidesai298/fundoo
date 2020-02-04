@@ -43,12 +43,12 @@ public class User {
 
 	
 	@JsonIgnore
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany
 	@JoinColumn(name = "id")
 	private List<Note> notes;
 	
 	@JsonIgnore
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany
 	@JoinColumn(name = "id")
 	private List<Label> labels;
 
