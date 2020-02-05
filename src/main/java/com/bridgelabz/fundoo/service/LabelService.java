@@ -89,6 +89,19 @@ public class LabelService implements ILabelService {
 		uRepo.getUser(jwt.decodeToken(token));
 		return lRepo.getAllLabels();
 	}
+	
+	@Override
+	public boolean addNoteLabel(String token, long noteId, long labelId) {
+		uRepo.getUser(jwt.decodeToken(token));
+		Note fetchedNote = nRepo.getNote(noteId);
+		Optional<Label> fetchedLabel = lRepo.findById(labelId);
+		if (fetchedLabel.isPresent()) {
+			fetchedNote.getLabelsList().add(fetchedLabel.get());
+			lRepo.save(fetchedLabel.get());
+			return true;
+		}
+		throw new LabelException("Label already exists",400);
+	}
 
 
 }

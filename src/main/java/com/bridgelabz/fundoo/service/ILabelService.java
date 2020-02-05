@@ -17,4 +17,6 @@ public interface ILabelService {
 
 	List<Label> foundLabelsList(String token);
 
+	boolean addNoteLabel(String token, long noteId, long labelId);
+
 }
