@@ -74,4 +74,12 @@ public class LabelController {
 		}
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Opps...No labels founds", 400));
 	}
+	
+	@PostMapping("/addlabels")
+	@ApiOperation(value = "Api to add existing label with note")
+	public ResponseEntity<Response> addLabelsToNote(@RequestHeader("token") String token,
+			@RequestParam("noteId") long noteId, @RequestParam("labelId") long labelId) {
+		lService.addNoteLabel(token, noteId, labelId);
+		return ResponseEntity.status(HttpStatus.OK).body(new Response("note added to the label", 200));
+	}
 }
