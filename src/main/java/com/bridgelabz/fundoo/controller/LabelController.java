@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -76,10 +77,18 @@ public class LabelController {
 	}
 	
 	@PostMapping("/addlabels")
-	@ApiOperation(value = "Api to add existing label with note")
+	@ApiOperation(value = "To add a note to existing label")
 	public ResponseEntity<Response> addLabelsToNote(@RequestHeader("token") String token,
 			@RequestParam("noteId") long noteId, @RequestParam("labelId") long labelId) {
 		lService.addNoteLabel(token, noteId, labelId);
 		return ResponseEntity.status(HttpStatus.OK).body(new Response("note added to the label", 200));
+	}
+	
+	@PatchMapping("/remove")
+	@ApiOperation(value = "To remove a note from a label", response = Response.class)
+	public ResponseEntity<Response> removeLabelsToNote(@RequestHeader("token") String token,
+			@RequestParam("noteId") long noteId, @RequestParam("labelId") long labelId) {
+		lService.remoNoteLabel(token, noteId, labelId);
+		return ResponseEntity.status(HttpStatus.OK).body(new Response("note removed from the label", 200));
 	}
 }
