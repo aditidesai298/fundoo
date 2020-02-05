@@ -1,18 +1,18 @@
 package com.bridgelabz.fundoo.service;
 
-import java.time.LocalDateTime;
-
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.bridgelabz.fundoo.configuration.RabbitMQSender;
 import com.bridgelabz.fundoo.model.LoginDto;
 import com.bridgelabz.fundoo.model.RegisterDto;
 import com.bridgelabz.fundoo.model.UpdatePassDto;
 import com.bridgelabz.fundoo.model.User;
 import com.bridgelabz.fundoo.repository.IUserRepository;
+import com.bridgelabz.fundoo.response.MailObject;
 import com.bridgelabz.fundoo.util.EmailSender;
 import com.bridgelabz.fundoo.util.JwtGenerator;
 import com.bridgelabz.fundoo.util.Util;
@@ -39,6 +39,10 @@ public class UserService implements IUserService {
 	private EmailSender emailobj;
 	@Autowired
 	private Environment environment;
+	@Autowired
+	private RabbitMQSender rabbitMQSender;
+	@Autowired
+	private MailObject mailobject;
 
 	@Override
 	public boolean register(RegisterDto UserDto) {
@@ -54,15 +58,23 @@ public class UserService implements IUserService {
 
 		BeanUtils.copyProperties(UserDto, newU);
 
-		newU.setCreatedDate(LocalDateTime.now());
+
 		newU.setPassword(pe.encode(newU.getPassword()));
 		newU.setVerified(false);
 
 		urepo.save(newU);
+		
 
 		String emailBodyContentLink = Util.createLink("http://localhost:8082/user/verification",
 				tokenobj.generateToken(newU.getId()));
-		emailobj.sendMail(newU.getEmail(), "registration link", emailBodyContentLink);
+		//rabbitmq
+		mailobject.setEmail(newU.getEmail());
+		mailobject.setMessage("registration link"+emailBodyContentLink);
+		mailobject.setSubject("verification");
+
+		rabbitMQSender.send(mailobject);
+
+		//emailobj.sendMail(newU.getEmail(), "registration link", emailBodyContentLink);
 
 		return true;
 
