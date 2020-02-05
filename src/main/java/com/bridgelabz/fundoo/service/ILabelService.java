@@ -19,4 +19,6 @@ public interface ILabelService {
 
 	boolean addNoteLabel(String token, long noteId, long labelId);
 
+	boolean remoNoteLabel(String token, long noteId, long labelId);
+
 }
