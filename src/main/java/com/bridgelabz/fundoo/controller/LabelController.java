@@ -95,7 +95,7 @@ public class LabelController {
 
 	@PatchMapping("/remove")
 	@ApiOperation(value = "To remove a note from a label")
-	public ResponseEntity<Response> removeLabelsToNote(@RequestHeader("token") String token,
+	public ResponseEntity<Response> removeLabelsfromNote(@RequestHeader("token") String token,
 			@RequestParam("noteId") long noteId, @RequestParam("labelId") long labelId) {
 		lService.remoNoteLabel(token, noteId, labelId);
 		return ResponseEntity.status(HttpStatus.OK).body(new Response("note removed from the label", 200));

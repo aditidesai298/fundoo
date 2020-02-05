@@ -13,7 +13,7 @@ import com.bridgelabz.fundoo.model.UpdatePassDto;
 import com.bridgelabz.fundoo.model.User;
 import com.bridgelabz.fundoo.repository.IUserRepository;
 import com.bridgelabz.fundoo.response.MailObject;
-import com.bridgelabz.fundoo.util.EmailSender;
+//import com.bridgelabz.fundoo.util.EmailSender;
 import com.bridgelabz.fundoo.util.JwtGenerator;
 import com.bridgelabz.fundoo.util.Util;
 
@@ -35,8 +35,8 @@ public class UserService implements IUserService {
 	private IUserRepository urepo;
 	@Autowired
 	private JwtGenerator tokenobj;
-	@Autowired
-	private EmailSender emailobj;
+//	@Autowired
+//	private EmailSender emailobj;
 	@Autowired
 	private Environment environment;
 	@Autowired
@@ -48,7 +48,7 @@ public class UserService implements IUserService {
 	public boolean register(RegisterDto UserDto) {
 
 		User u1 = urepo.getUser(UserDto.getEmail());
-		;
+		
 		if (u1 != null) {
 			return false;
 
@@ -65,7 +65,7 @@ public class UserService implements IUserService {
 		urepo.save(newU);
 		
 
-		String emailBodyContentLink = Util.createLink("http://localhost:8082/user/verification",
+		String emailBodyContentLink = Util.createLink("http://localhost:8083/user/verification",
 				tokenobj.generateToken(newU.getId()));
 		//rabbitmq
 		mailobject.setEmail(newU.getEmail());
@@ -96,9 +96,16 @@ public class UserService implements IUserService {
 			if (inputUser.isVerified() && pe.matches(Ldto.getPassword(), inputUser.getPassword())) {
 				return inputUser;
 			}
-			String emailBodyLink = Util.createLink("http://localhost:8082" + "/user/verification",
+			
+			String emailBodyLink = Util.createLink("http://localhost:8083" + "/user/verification",
 					tokenobj.generateToken(inputUser.getId()));
-			emailobj.sendMail(inputUser.getEmail(), "Registration Verification link", emailBodyLink);
+			mailobject.setEmail(inputUser.getEmail());
+			mailobject.setMessage("Registration verification link"+emailBodyLink);
+			mailobject.setSubject("verification");
+			
+			rabbitMQSender.send(mailobject);
+			
+		//emailobj.sendMail(inputUser.getEmail(), "Registration Verification link", emailBodyLink);
 			return inputUser;
 		}
 		// not registered
@@ -112,9 +119,16 @@ public class UserService implements IUserService {
 			return false;
 		}
 
-		String mail = Util.createLink("http://localhost:8082" + "/user/forgotpassword",
+		String mail = Util.createLink("http://localhost:8083" + "/user/forgotpassword",
 				tokenobj.generateToken(user.getId()));
-		emailobj.sendMail(user.getEmail(), "verification", mail);
+		
+		mailobject.setEmail(user.getEmail());
+		mailobject.setMessage("Registration verification link"+mail);
+		mailobject.setSubject("verification");
+		
+		rabbitMQSender.send(mailobject);
+		
+	//	emailobj.sendMail(user.getEmail(), "verification", mail);
 		return true;
 
 	}
@@ -125,8 +139,15 @@ public class UserService implements IUserService {
 			updatePasswordInformation.setConfirmPassword(pe.encode(updatePasswordInformation.getConfirmPassword()));
 			urepo.updatePassword(updatePasswordInformation, tokenobj.decodeToken(token));
 			// sends mail after updating password
-			emailobj.sendMail(updatePasswordInformation.getEmailId(), "Password updated sucessfully!",
-					postUpdatePassMail(updatePasswordInformation));
+			
+			mailobject.setEmail(updatePasswordInformation.getEmailId());
+			mailobject.setMessage("Password updated successfully!");
+			mailobject.setSubject(postUpdatePassMail(updatePasswordInformation));
+			
+			rabbitMQSender.send(mailobject);
+			
+		//	emailobj.sendMail(updatePasswordInformation.getEmailId(), "Password updated sucessfully!",
+		//			postUpdatePassMail(updatePasswordInformation));
 			return true;
 		}
 		return false;

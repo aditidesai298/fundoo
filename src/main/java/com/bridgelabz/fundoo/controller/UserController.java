@@ -22,6 +22,8 @@ import com.bridgelabz.fundoo.response.Response;
 import com.bridgelabz.fundoo.service.IUserService;
 import com.bridgelabz.fundoo.util.JwtGenerator;
 
+import io.swagger.annotations.ApiOperation;
+
 /** Controller class to manage the requests from the user
  * such as registration, login, forgot password etc
  * 
@@ -39,6 +41,8 @@ public class UserController {
 	@Autowired
 	private JwtGenerator tk;
 
+	@ApiOperation(value = "To register a new user")
+	
 	@PostMapping("registration")
 	public ResponseEntity<Response> registration(@RequestBody RegisterDto rdto) {
 
@@ -51,6 +55,8 @@ public class UserController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(new Response("Registration successful!", 200));
 
 	}
+	
+	@ApiOperation(value = "To verify registration of user")
 
 	@GetMapping("verification/{token}")
 	public ResponseEntity<Response> verifyRegistration(@PathVariable("token") String token) {
@@ -62,6 +68,8 @@ public class UserController {
 
 	}
 
+	@ApiOperation(value = "To login")
+	
 	@PostMapping("/login")
 	public ResponseEntity<LoginResponse> login(@RequestBody LoginDto dto) {
 
@@ -78,6 +86,8 @@ public class UserController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new LoginResponse("Login failed", 400, dto));
 		}
 	}
+	
+	@ApiOperation(value = "Api for forgot password")
 
 	@PostMapping("forgotPassword")
 	public ResponseEntity<Response> forgotPassword(@RequestParam("email") String email) {
@@ -87,7 +97,7 @@ public class UserController {
 		}
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new Response("not verified", 401));
 	}
-
+	@ApiOperation(value = "To update password")
 	@PutMapping("updatePassword/{token}")
 	public ResponseEntity<Response> updatePassword(@PathVariable("token") String token,
 			@RequestBody() UpdatePassDto upadatePassword) {
