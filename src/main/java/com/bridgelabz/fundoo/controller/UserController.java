@@ -1,6 +1,7 @@
 package com.bridgelabz.fundoo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +22,14 @@ import com.bridgelabz.fundoo.response.Response;
 import com.bridgelabz.fundoo.service.IUserService;
 import com.bridgelabz.fundoo.util.JwtGenerator;
 
+/** Controller class to manage the requests from the user
+ * such as registration, login, forgot password etc
+ * 
+ * @author Aditi Desai
+ * @created 25.01.2020
+ * @version 1.0
+ * */
+
 @RestController
 @RequestMapping("user")
 public class UserController {
@@ -33,7 +42,7 @@ public class UserController {
 	@PostMapping("registration")
 	public ResponseEntity<Response> registration(@RequestBody RegisterDto rdto) {
 
-		System.out.println("Inside Controller...");
+		
 		boolean rstatus = uService.register(rdto);
 
 		if ((rstatus) == false) {

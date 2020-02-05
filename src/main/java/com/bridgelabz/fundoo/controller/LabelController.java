@@ -24,6 +24,15 @@ import com.bridgelabz.fundoo.service.ILabelService;
 
 import io.swagger.annotations.ApiOperation;
 
+/**
+ * Controller class used to manage all the requests by the user such as create
+ * label, edit label name, delete label etc
+ * 
+ * @author Aditi Desai
+ * @created 1.2.20
+ * @version 1.0
+ */
+
 @RestController
 @RequestMapping("/label")
 public class LabelController {
@@ -75,7 +84,7 @@ public class LabelController {
 		}
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Opps...No labels founds", 400));
 	}
-	
+
 	@PostMapping("/addlabels")
 	@ApiOperation(value = "To add a note to existing label")
 	public ResponseEntity<Response> addLabelsToNote(@RequestHeader("token") String token,
@@ -83,7 +92,7 @@ public class LabelController {
 		lService.addNoteLabel(token, noteId, labelId);
 		return ResponseEntity.status(HttpStatus.OK).body(new Response("note added to the label", 200));
 	}
-	
+
 	@PatchMapping("/remove")
 	@ApiOperation(value = "To remove a note from a label")
 	public ResponseEntity<Response> removeLabelsToNote(@RequestHeader("token") String token,

@@ -19,8 +19,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class EmailSender {
 
-	String from_email = "aditidesaifundoo@gmail.com";
-	String from_password = "1234aditi.fundoo!";
+	String fromEmail = "aditidesaifundoo@gmail.com";
+	String fromPassword = "1234aditi.fundoo!";
 
 	public void sendMail(String toEmailId, String subject, String bodyContent) {
 
@@ -30,17 +30,18 @@ public class EmailSender {
 		props.put("mail.smtp.auth", "true"); // enable authent
 		props.put("mail.smtp.starttls.enable", "true"); // enable STARTTLS
 
-		Authenticator authent = new Authenticator() {
+		Authenticator auth = new Authenticator() {
 			@Override
 			protected PasswordAuthentication getPasswordAuthentication() {
-				return new PasswordAuthentication(from_email, from_password);
+				return new PasswordAuthentication(fromEmail, fromPassword);
 			}
 		};
-		Session session = Session.getInstance(props, authent);
+		Session session = Session.getInstance(props, auth);
 		try {
 			Transport.send(mimeMessageConfiguration(session, toEmailId, subject, bodyContent));
 		} catch (MessagingException e) {
 			e.printStackTrace();
+			//LOGGER.log("context",e);
 
 		}
 
@@ -70,7 +71,7 @@ public class EmailSender {
 			e.printStackTrace();
 		}
 		try {
-			mimeMessage.setFrom(new InternetAddress(from_email, "Fundoo Note Application"));
+			mimeMessage.setFrom(new InternetAddress(fromEmail, "Fundoo Note Application"));
 		} catch (UnsupportedEncodingException e) {
 
 			e.printStackTrace();
@@ -79,7 +80,7 @@ public class EmailSender {
 			e.printStackTrace();
 		}
 		try {
-			mimeMessage.setReplyTo(InternetAddress.parse(from_email, false));
+			mimeMessage.setReplyTo(InternetAddress.parse(fromEmail, false));
 		} catch (AddressException e) {
 
 			e.printStackTrace();

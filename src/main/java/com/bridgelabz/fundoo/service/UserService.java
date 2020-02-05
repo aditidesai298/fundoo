@@ -17,6 +17,15 @@ import com.bridgelabz.fundoo.util.EmailSender;
 import com.bridgelabz.fundoo.util.JwtGenerator;
 import com.bridgelabz.fundoo.util.Util;
 
+/**
+ * The class that has all the service methods that provide services to the
+ * controller such as registering the user, login service methods, etc. It
+ * contains the implementation of such methods.
+ * 
+ * @author Aditi Desai
+ * @created 26.1.20
+ * @version 1.0
+ */
 @Service
 public class UserService implements IUserService {
 
@@ -31,13 +40,11 @@ public class UserService implements IUserService {
 	@Autowired
 	private Environment environment;
 
-	
-
 	@Override
 	public boolean register(RegisterDto UserDto) {
 
 		User u1 = urepo.getUser(UserDto.getEmail());
-		System.out.println("Email :" + u1);
+		;
 		if (u1 != null) {
 			return false;
 
@@ -53,7 +60,7 @@ public class UserService implements IUserService {
 
 		urepo.save(newU);
 
-		String emailBodyContentLink = Util.createLink("http://localhost:8081/user/verification",
+		String emailBodyContentLink = Util.createLink("http://localhost:8082/user/verification",
 				tokenobj.generateToken(newU.getId()));
 		emailobj.sendMail(newU.getEmail(), "registration link", emailBodyContentLink);
 
@@ -70,17 +77,17 @@ public class UserService implements IUserService {
 
 	@Override
 	public User login(LoginDto Ldto) {
-		User input_user = urepo.getUser(Ldto.getEmail());
+		User inputUser = urepo.getUser(Ldto.getEmail());
 		// valid user
-		if (input_user != null) {
+		if (inputUser != null) {
 			// send for verification if not verified
-			if (input_user.isVerified() && pe.matches(Ldto.getPassword(), input_user.getPassword())) {
-				return input_user;
+			if (inputUser.isVerified() && pe.matches(Ldto.getPassword(), inputUser.getPassword())) {
+				return inputUser;
 			}
-			String email_body_link = Util.createLink("http://localhost:8081" + "/user/verification",
-					tokenobj.generateToken(input_user.getId()));
-			emailobj.sendMail(input_user.getEmail(), "Registration Verification link", email_body_link);
-			return input_user;
+			String emailBodyLink = Util.createLink("http://localhost:8082" + "/user/verification",
+					tokenobj.generateToken(inputUser.getId()));
+			emailobj.sendMail(inputUser.getEmail(), "Registration Verification link", emailBodyLink);
+			return inputUser;
 		}
 		// not registered
 		return null;
@@ -88,16 +95,16 @@ public class UserService implements IUserService {
 
 	@Override
 	public boolean is_User_exists(String email) {
-		User user=urepo.getUser(email);
+		User user = urepo.getUser(email);
 		if (!user.isVerified()) {
 			return false;
 		}
-		
-		String mail=Util.createLink("http://localhost:8081"+"/user/forgotpassword",tokenobj.generateToken(user.getId()));
+
+		String mail = Util.createLink("http://localhost:8082" + "/user/forgotpassword",
+				tokenobj.generateToken(user.getId()));
 		emailobj.sendMail(user.getEmail(), "verification", mail);
 		return true;
-		
-		
+
 	}
 
 	@Override
@@ -107,14 +114,14 @@ public class UserService implements IUserService {
 			urepo.updatePassword(updatePasswordInformation, tokenobj.decodeToken(token));
 			// sends mail after updating password
 			emailobj.sendMail(updatePasswordInformation.getEmailId(), "Password updated sucessfully!",
-					post_updatePass_mail(updatePasswordInformation));
+					postUpdatePassMail(updatePasswordInformation));
 			return true;
 		}
 		return false;
 
 	}
 
-	private String post_updatePass_mail(UpdatePassDto updatePasswordInformation) {
+	private String postUpdatePassMail(UpdatePassDto updatePasswordInformation) {
 		String passwordUpdateBodyContent = "Login Details \n" + "UserId : " + updatePasswordInformation.getEmailId()
 				+ "\nPassword : " + updatePasswordInformation.getPassword();
 		String loginString = "\nClick on the link to login\n";

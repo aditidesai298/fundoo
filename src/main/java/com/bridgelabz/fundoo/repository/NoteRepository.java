@@ -38,7 +38,7 @@ public class NoteRepository implements INoteRepository {
 	
 	@Override
 	@Transactional
-	public boolean isDeletedNote(long nId) {
+	public boolean deleteNote(long nId) {
 		Session session = entityManager.unwrap(Session.class);
 		Query query = session.createQuery("DELETE FROM Note WHERE id=:id");
 		query.setParameter("id", nId);

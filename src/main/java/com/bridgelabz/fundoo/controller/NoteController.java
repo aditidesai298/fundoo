@@ -25,6 +25,15 @@ import com.bridgelabz.fundoo.service.INoteService;
 
 import io.swagger.annotations.ApiOperation;
 
+/**
+ * Controller class to manage the various requests by the user such as create
+ * note, delete note, edit name, etc
+ * 
+ * @author Aditi Desai
+ * @version 1.0
+ * @created 27.1.20
+ */
+
 @RestController
 @RequestMapping("note")
 public class NoteController {
@@ -37,8 +46,7 @@ public class NoteController {
 	@PostMapping("create")
 	public ResponseEntity<Response> createNote(@RequestBody NoteDto nDto, @RequestHeader("token") String token) {
 		if (nService.createNote(nDto, token)) {
-			return ResponseEntity.status(HttpStatus.CREATED).body(new Response("Note created!", 200
-					));
+			return ResponseEntity.status(HttpStatus.CREATED).body(new Response("Note created!", 200));
 		}
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response("Error creating note", 400));
 	}
@@ -130,7 +138,7 @@ public class NoteController {
 		nService.deleteReminder(token, noteId);
 		return ResponseEntity.status(HttpStatus.CREATED).body(new Response("Reminder removed!", 200));
 	}
-	
+
 //	@PostMapping("/notes/restore/{id}")
 //	public ResponseEntity<Response> restore(@RequestHeader String token, @PathVariable Long noteId) {
 //		if (nService.restored(token, noteId)) {
@@ -139,31 +147,27 @@ public class NoteController {
 //		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response( "Note is Trashed",400));
 //				
 //	}
-	
+
 	@ApiOperation(value = "To fetch all trashed notes for user")
 
 	@GetMapping("fetch/notes/trashed")
 	public ResponseEntity<Response> fetchTrashedNotes(@RequestHeader("token") String token) {
 		List<Note> trashedNotes = nService.getTrashed(token);
 		if (!trashedNotes.isEmpty()) {
-			return ResponseEntity.status(HttpStatus.OK)
-					.body(new Response("Trashed notes are", 200, trashedNotes));
+			return ResponseEntity.status(HttpStatus.OK).body(new Response("Trashed notes are", 200, trashedNotes));
 		}
-		return ResponseEntity.status(HttpStatus.NOT_FOUND)
-				.body(new Response("Empty trash", 400));
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Empty trash", 400));
 	}
-	
+
 	@ApiOperation(value = "To get all pinned notes for user")
 
 	@GetMapping("fetch/notes/pinned")
 	public ResponseEntity<Response> fetchPinnedNotes(@RequestHeader("token") String token) {
 		List<Note> pinnedNotes = nService.getPinned(token);
 		if (!pinnedNotes.isEmpty()) {
-			return ResponseEntity.status(HttpStatus.OK)
-					.body(new Response("Pinned notes are", 200, pinnedNotes));
+			return ResponseEntity.status(HttpStatus.OK).body(new Response("Pinned notes are", 200, pinnedNotes));
 		}
-		return ResponseEntity.status(HttpStatus.NOT_FOUND)
-				.body(new Response("No notes pinned", 400));
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("No notes pinned", 400));
 	}
 
 }

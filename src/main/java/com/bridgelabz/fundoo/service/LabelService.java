@@ -17,6 +17,14 @@ import com.bridgelabz.fundoo.repository.INoteRepository;
 import com.bridgelabz.fundoo.repository.IUserRepository;
 import com.bridgelabz.fundoo.util.JwtGenerator;
 
+/**The class that contains the services for label controller such as
+ * creating a label, deleting a label, etc.
+ * This class contains the implementation of all such methods for the
+ * Controller to use.
+ * @author Aditi Desai
+ * @version 1.0
+ * @created 2.2.20
+ * */
 @Service
 public class LabelService implements ILabelService {
 	@Autowired

@@ -10,7 +10,7 @@ public interface INoteRepository {
 
 	public Note getNote(long noteId);
 
-	public boolean isDeletedNote(long noteId);
+	public boolean deleteNote(long noteId);
 
 	public List<Note> getAllNotes(long userId);
 	public List<Note> getTrashed(long userId);
