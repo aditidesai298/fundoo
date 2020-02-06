@@ -31,7 +31,7 @@ public class NoteRepository implements INoteRepository {
 	@Transactional
 	public Note getNote(long nId) {
 		Session session = entityManager.unwrap(Session.class);
-		Query query = session.createQuery("FROM Note WHERE id=:id");
+		Query query = session.createQuery("FROM Note WHERE n_id=:id");
 		query.setParameter("id", nId);
 		return (Note) query.uniqueResult();
 	}
@@ -40,7 +40,7 @@ public class NoteRepository implements INoteRepository {
 	@Transactional
 	public boolean deleteNote(long nId) {
 		Session session = entityManager.unwrap(Session.class);
-		Query query = session.createQuery("DELETE FROM Note WHERE id=:id");
+		Query query = session.createQuery("DELETE FROM Note WHERE n_id=:id");
 		query.setParameter("id", nId);
 		query.executeUpdate();
 		return true;

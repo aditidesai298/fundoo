@@ -19,4 +19,5 @@ public class SwaggerConfig {
 				.apis(RequestHandlerSelectors.basePackage("com.bridgelabz.fundoo.controller")).paths(regex("/.*"))
 				.build();
 	}
+	
 }

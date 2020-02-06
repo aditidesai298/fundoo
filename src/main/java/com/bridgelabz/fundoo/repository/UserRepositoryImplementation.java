@@ -14,6 +14,6 @@ import com.bridgelabz.fundoo.model.User;
 public interface UserRepositoryImplementation extends JpaRepository<User, Long> {
 	
 	@Modifying
-	@Query(value = "update user_model set is_verified = true where id = :id", nativeQuery = true)
+	@Query(value = "update user set is_verified = true where id = ?", nativeQuery = true)
 	public void verify(long id);
 }

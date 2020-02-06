@@ -48,7 +48,7 @@ public class UserService implements IUserService {
 	public boolean register(RegisterDto UserDto) {
 
 		User u1 = urepo.getUser(UserDto.getEmail());
-		
+
 		if (u1 != null) {
 			return false;
 
@@ -58,23 +58,22 @@ public class UserService implements IUserService {
 
 		BeanUtils.copyProperties(UserDto, newU);
 
-
 		newU.setPassword(pe.encode(newU.getPassword()));
 		newU.setVerified(false);
 
 		urepo.save(newU);
-		
 
 		String emailBodyContentLink = Util.createLink("http://localhost:8083/user/verification",
 				tokenobj.generateToken(newU.getId()));
-		//rabbitmq
+		// rabbitmq
 		mailobject.setEmail(newU.getEmail());
-		mailobject.setMessage("registration link"+emailBodyContentLink);
+		mailobject.setMessage("registration link" + emailBodyContentLink);
 		mailobject.setSubject("verification");
 
 		rabbitMQSender.send(mailobject);
 
-		//emailobj.sendMail(newU.getEmail(), "registration link", emailBodyContentLink);
+		// emailobj.sendMail(newU.getEmail(), "registration link",
+		// emailBodyContentLink);
 
 		return true;
 
@@ -96,16 +95,17 @@ public class UserService implements IUserService {
 			if (inputUser.isVerified() && pe.matches(Ldto.getPassword(), inputUser.getPassword())) {
 				return inputUser;
 			}
-			
+
 			String emailBodyLink = Util.createLink("http://localhost:8083" + "/user/verification",
 					tokenobj.generateToken(inputUser.getId()));
 			mailobject.setEmail(inputUser.getEmail());
-			mailobject.setMessage("Registration verification link"+emailBodyLink);
+			mailobject.setMessage("Registration verification link " + emailBodyLink);
 			mailobject.setSubject("verification");
-			
+
 			rabbitMQSender.send(mailobject);
-			
-		//emailobj.sendMail(inputUser.getEmail(), "Registration Verification link", emailBodyLink);
+
+			// emailobj.sendMail(inputUser.getEmail(), "Registration Verification link",
+			// emailBodyLink);
 			return inputUser;
 		}
 		// not registered
@@ -121,14 +121,14 @@ public class UserService implements IUserService {
 
 		String mail = Util.createLink("http://localhost:8083" + "/user/forgotpassword",
 				tokenobj.generateToken(user.getId()));
-		
+
 		mailobject.setEmail(user.getEmail());
-		mailobject.setMessage("Registration verification link"+mail);
+		mailobject.setMessage("Registration verification link" + mail);
 		mailobject.setSubject("verification");
-		
+
 		rabbitMQSender.send(mailobject);
-		
-	//	emailobj.sendMail(user.getEmail(), "verification", mail);
+
+		// emailobj.sendMail(user.getEmail(), "verification", mail);
 		return true;
 
 	}
@@ -139,15 +139,16 @@ public class UserService implements IUserService {
 			updatePasswordInformation.setConfirmPassword(pe.encode(updatePasswordInformation.getConfirmPassword()));
 			urepo.updatePassword(updatePasswordInformation, tokenobj.decodeToken(token));
 			// sends mail after updating password
-			
+
 			mailobject.setEmail(updatePasswordInformation.getEmailId());
 			mailobject.setMessage("Password updated successfully!");
 			mailobject.setSubject(postUpdatePassMail(updatePasswordInformation));
-			
+
 			rabbitMQSender.send(mailobject);
-			
-		//	emailobj.sendMail(updatePasswordInformation.getEmailId(), "Password updated sucessfully!",
-		//			postUpdatePassMail(updatePasswordInformation));
+
+			// emailobj.sendMail(updatePasswordInformation.getEmailId(), "Password updated
+			// sucessfully!",
+			// postUpdatePassMail(updatePasswordInformation));
 			return true;
 		}
 		return false;

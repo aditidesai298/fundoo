@@ -19,7 +19,7 @@ public class UserRepository implements IUserRepository {
 
 	@Override
 	public User save(User newUser) {
-		System.out.println("Data :" + newUser.getEmail());
+		
 		Session sess = entityManager.unwrap(Session.class);
 		sess.saveOrUpdate(newUser);
 		return newUser;
@@ -30,7 +30,7 @@ public class UserRepository implements IUserRepository {
 	public User getUser(String email) {
 		Session sess = entityManager.unwrap(Session.class);
 		Query emailFetchQuery = sess.createQuery("FROM User where email=:email");
-		System.out.println("After Query");
+		
 		emailFetchQuery.setParameter("email", email);
 		return (User) emailFetchQuery.uniqueResult();
 	}
@@ -53,10 +53,10 @@ public class UserRepository implements IUserRepository {
 
 	@Transactional
 	@Override
-	public boolean updatePassword(UpdatePassDto updatePasswordinformation, long id) {
+	public boolean updatePassword(UpdatePassDto UPdto, long id) {
 		Session session = entityManager.unwrap(Session.class);
 		Query query = session.createQuery("UPDATE User set password=:updatedPassword" + " WHERE id=:id");
-		query.setParameter("updatedPassword", updatePasswordinformation.getConfirmPassword());
+		query.setParameter("updatedPassword", UPdto.getConfirmPassword());
 		query.setParameter("id", id);
 		query.executeUpdate();
 		return true;

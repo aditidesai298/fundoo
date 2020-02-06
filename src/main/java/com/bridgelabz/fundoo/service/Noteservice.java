@@ -1,11 +1,13 @@
 package com.bridgelabz.fundoo.service;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import com.bridgelabz.fundoo.exception.AuthorizationException;
@@ -37,6 +39,24 @@ public class Noteservice implements INoteService {
 	@Autowired
 	private JwtGenerator tokenobj;
 
+	@Autowired
+	RedisTemplate<String, Object> redisTemplate;
+	
+	
+	private long getRedisCacheId(String token) {
+		
+		String[] splitedToken = token.split("\\.");
+		System.out.println(splitedToken);
+		String redisTokenKey = splitedToken[1] + splitedToken[2];
+		System.out.println("Inside redis cache method");
+		if (redisTemplate.opsForValue().get(redisTokenKey) == null) {
+			long idForRedis = tokenobj.decodeToken(token);
+		
+			redisTemplate.opsForValue().set(redisTokenKey, idForRedis, 3 * 60, TimeUnit.SECONDS);
+		}
+		return (Long) redisTemplate.opsForValue().get(redisTokenKey);
+	}
+
 	private User authenticatedUser(String token) {
 		User getUser = urepo.getUser(tokenobj.decodeToken(token));
 		if (getUser != null) {
@@ -48,6 +68,7 @@ public class Noteservice implements INoteService {
 	@Override
 	public boolean createNote(NoteDto noteDto, String token) {
 		// found authorized user
+		
 		User getUser = authenticatedUser(token);
 		Note newNote = new Note();
 		BeanUtils.copyProperties(noteDto, newNote);
@@ -59,6 +80,7 @@ public class Noteservice implements INoteService {
 	}
 
 	private Note isVerified(long noteId) {
+		
 		Note getNote = nrepo.getNote(noteId);
 		if (getNote != null) {
 			return getNote;
@@ -68,10 +90,12 @@ public class Noteservice implements INoteService {
 
 	@Override
 	public boolean deleteNote(long noteId, String token) {
+		
+		long noteIdId = getRedisCacheId(token);
 		// found authorized user
-		authenticatedUser(token);
+		//authenticatedUser(token);
 		// verified valid note
-		isVerified(noteId);
+		//isVerified(noteId);
 		nrepo.deleteNote(noteId);
 		return true;
 	}
