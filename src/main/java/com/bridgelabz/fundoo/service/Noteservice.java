@@ -45,16 +45,16 @@ public class Noteservice implements INoteService {
 	
 	private long getRedisCacheId(String token) {
 		
-		String[] splitedToken = token.split("\\.");
-		System.out.println(splitedToken);
-		String redisTokenKey = splitedToken[1] + splitedToken[2];
+		String[] tokenSplit = token.split("\\.");
+		System.out.println(tokenSplit);
+		String redisToken = tokenSplit[1] + tokenSplit[2];
 		System.out.println("Inside redis cache method");
-		if (redisTemplate.opsForValue().get(redisTokenKey) == null) {
-			long idForRedis = tokenobj.decodeToken(token);
+		if (redisTemplate.opsForValue().get(redisToken) == null) {
+			long redisId = tokenobj.decodeToken(token);
 		
-			redisTemplate.opsForValue().set(redisTokenKey, idForRedis, 3 * 60, TimeUnit.SECONDS);
+			redisTemplate.opsForValue().set(redisToken, redisId, 3 * 60, TimeUnit.SECONDS);
 		}
-		return (Long) redisTemplate.opsForValue().get(redisTokenKey);
+		return (Long) redisTemplate.opsForValue().get(redisToken);
 	}
 
 	private User authenticatedUser(String token) {
@@ -91,7 +91,7 @@ public class Noteservice implements INoteService {
 	@Override
 	public boolean deleteNote(long noteId, String token) {
 		
-		long noteIdId = getRedisCacheId(token);
+		noteId = getRedisCacheId(token);
 		// found authorized user
 		//authenticatedUser(token);
 		// verified valid note
