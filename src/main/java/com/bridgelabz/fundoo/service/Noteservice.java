@@ -42,6 +42,9 @@ public class Noteservice implements INoteService {
 	@Autowired
 	RedisTemplate<String, Object> redisTemplate;
 	
+	/**
+	 * Method to get the RedisCache Id where we split the token and store it
+    */
 	
 	private long getRedisCacheId(String token) {
 		
@@ -91,10 +94,14 @@ public class Noteservice implements INoteService {
 	@Override
 	public boolean deleteNote(long noteId, String token) {
 		
+		/**
+		 * Example for implementing Redis Cache
+		 */
+		
 		noteId = getRedisCacheId(token);
-		// found authorized user
+
 		//authenticatedUser(token);
-		// verified valid note
+
 		//isVerified(noteId);
 		nrepo.deleteNote(noteId);
 		return true;

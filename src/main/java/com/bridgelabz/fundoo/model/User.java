@@ -4,19 +4,22 @@ package com.bridgelabz.fundoo.model;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name="user")
+@Table(name = "user")
 public class User {
 
 	@Id
@@ -40,16 +43,29 @@ public class User {
 	@Column(nullable = false)
 	private boolean isVerified;
 
-	
 	@JsonIgnore
 	@OneToMany
 	@JoinColumn(name = "id")
 	private List<Note> notes;
-	
+
 	@JsonIgnore
 	@OneToMany
 	@JoinColumn(name = "id")
 	private List<Label> labels;
+
+	@JsonIgnore
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinTable(name = "collaborator_note", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = {
+			@JoinColumn(name = "note_id") })
+	private List<Note> collaboratedNotes;
+
+	public List<Note> getCollaboratedNotes() {
+		return collaboratedNotes;
+	}
+
+	public void setCollaboratedNotes(List<Note> colaboratedNotes) {
+		this.collaboratedNotes = colaboratedNotes;
+	}
 
 	public List<Label> getLabels() {
 		return labels;

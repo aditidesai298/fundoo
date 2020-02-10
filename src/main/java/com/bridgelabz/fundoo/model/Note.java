@@ -35,10 +35,38 @@ public class Note {
 	private LocalDateTime reminderDate;
 
 	@ManyToMany
-	@JoinTable(name = "note_label",
-	joinColumns = { @JoinColumn(name = "n_id") }, inverseJoinColumns = { @JoinColumn(name = "l_id") })
+	@JoinTable(name = "note_label", joinColumns = { @JoinColumn(name = "n_id") }, inverseJoinColumns = {
+			@JoinColumn(name = "l_id") })
 	@JsonIgnore
 	private List<Label> labelsList;
+
+	@JsonIgnore
+	@ManyToMany(mappedBy = "collaboratedNotes")
+	private List<User> collaboratedUsers;
+
+	public long getN_id() {
+		return n_id;
+	}
+
+	public void setN_id(long n_id) {
+		this.n_id = n_id;
+	}
+
+	public LocalDateTime getReminderDate() {
+		return reminderDate;
+	}
+
+	public void setReminderDate(LocalDateTime reminderDate) {
+		this.reminderDate = reminderDate;
+	}
+
+	public List<User> getCollaboratedUsers() {
+		return collaboratedUsers;
+	}
+
+	public void setCollaboratedUsers(List<User> collaboratedUsers) {
+		this.collaboratedUsers = collaboratedUsers;
+	}
 
 	public long getId() {
 		return n_id;
