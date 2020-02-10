@@ -52,9 +52,9 @@ public class CollaboratorService implements ICollaboratorService {
 	public boolean addCollaborator(String token, long noteId, String emailId) {
 		authenticatedMainUser(token);
 		Note validNote = verifiedNote(noteId);
-		User validColaborator = validCollaborator(emailId);
-		validNote.getCollaboratedUsers().add(validColaborator);
-		validColaborator.getCollaboratedNotes().add(validNote);
+		User validCollaborator = validCollaborator(emailId);
+		validNote.getCollaboratedUsers().add(validCollaborator);
+		validCollaborator.getCollaboratedNotes().add(validNote);
 		nRepo.saveOrUpdate(validNote);
 		return true;
 	}
