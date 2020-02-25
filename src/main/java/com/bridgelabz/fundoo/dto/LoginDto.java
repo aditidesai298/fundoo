@@ -1,4 +1,4 @@
-package com.bridgelabz.fundoo.model;
+package com.bridgelabz.fundoo.dto;
 
 import javax.validation.constraints.Email;
 

@@ -1,6 +1,6 @@
 package com.bridgelabz.fundoo.repository;
 
-import com.bridgelabz.fundoo.model.UpdatePassDto;
+import com.bridgelabz.fundoo.dto.UpdatePassDto;
 import com.bridgelabz.fundoo.model.User;
 
 public interface IUserRepository {

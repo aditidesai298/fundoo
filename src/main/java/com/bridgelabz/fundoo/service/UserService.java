@@ -7,12 +7,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.bridgelabz.fundoo.configuration.RabbitMQSender;
-import com.bridgelabz.fundoo.model.LoginDto;
-import com.bridgelabz.fundoo.model.RegisterDto;
-import com.bridgelabz.fundoo.model.UpdatePassDto;
+import com.bridgelabz.fundoo.dto.LoginDto;
+import com.bridgelabz.fundoo.dto.RegisterDto;
+import com.bridgelabz.fundoo.dto.UpdatePassDto;
 import com.bridgelabz.fundoo.model.User;
 import com.bridgelabz.fundoo.repository.IUserRepository;
 import com.bridgelabz.fundoo.response.MailObject;
+import com.bridgelabz.fundoo.util.EmailSender;
 //import com.bridgelabz.fundoo.util.EmailSender;
 import com.bridgelabz.fundoo.util.JwtGenerator;
 import com.bridgelabz.fundoo.util.Util;
@@ -35,8 +36,8 @@ public class UserService implements IUserService {
 	private IUserRepository urepo;
 	@Autowired
 	private JwtGenerator tokenobj;
-//	@Autowired
-//	private EmailSender emailobj;
+	@Autowired
+	private EmailSender emailobj;
 	@Autowired
 	private Environment environment;
 	@Autowired
@@ -66,14 +67,14 @@ public class UserService implements IUserService {
 		String emailBodyContentLink = Util.createLink("http://localhost:8083/user/verification",
 				tokenobj.generateToken(newU.getId()));
 		// rabbitmq
-		mailobject.setEmail(newU.getEmail());
-		mailobject.setMessage("registration link" + emailBodyContentLink);
-		mailobject.setSubject("verification");
+//		mailobject.setEmail(newU.getEmail());
+//		mailobject.setMessage("registration link" + emailBodyContentLink);
+//		mailobject.setSubject("verification");
 
 		rabbitMQSender.send(mailobject);
 
-		// emailobj.sendMail(newU.getEmail(), "registration link",
-		// emailBodyContentLink);
+		 emailobj.sendMail(newU.getEmail(), "registration link",
+		 emailBodyContentLink);
 
 		return true;
 
@@ -98,14 +99,14 @@ public class UserService implements IUserService {
 
 			String emailBodyLink = Util.createLink("http://localhost:8083" + "/user/verification",
 					tokenobj.generateToken(inputUser.getId()));
-			mailobject.setEmail(inputUser.getEmail());
-			mailobject.setMessage("Registration verification link " + emailBodyLink);
-			mailobject.setSubject("verification");
+//			mailobject.setEmail(inputUser.getEmail());
+//			mailobject.setMessage("Registration verification link " + emailBodyLink);
+//			mailobject.setSubject("verification");
+//
+//			rabbitMQSender.send(mailobject);
 
-			rabbitMQSender.send(mailobject);
-
-			// emailobj.sendMail(inputUser.getEmail(), "Registration Verification link",
-			// emailBodyLink);
+			 emailobj.sendMail(inputUser.getEmail(), "Registration Verification link",
+			 emailBodyLink);
 			return inputUser;
 		}
 		// not registered
@@ -122,13 +123,13 @@ public class UserService implements IUserService {
 		String mail = Util.createLink("http://localhost:8083" + "/user/forgotpassword",
 				tokenobj.generateToken(user.getId()));
 
-		mailobject.setEmail(user.getEmail());
-		mailobject.setMessage("Registration verification link" + mail);
-		mailobject.setSubject("verification");
+//		mailobject.setEmail(user.getEmail());
+//		mailobject.setMessage("Registration verification link" + mail);
+//		mailobject.setSubject("verification");
+//
+//		rabbitMQSender.send(mailobject);
 
-		rabbitMQSender.send(mailobject);
-
-		// emailobj.sendMail(user.getEmail(), "verification", mail);
+		 emailobj.sendMail(user.getEmail(), "verification", mail);
 		return true;
 
 	}
@@ -140,15 +141,14 @@ public class UserService implements IUserService {
 			urepo.updatePassword(updatePasswordInformation, tokenobj.decodeToken(token));
 			// sends mail after updating password
 
-			mailobject.setEmail(updatePasswordInformation.getEmailId());
-			mailobject.setMessage("Password updated successfully!");
-			mailobject.setSubject(postUpdatePassMail(updatePasswordInformation));
+//			mailobject.setEmail(updatePasswordInformation.getEmailId());
+//			mailobject.setMessage("Password updated successfully!");
+//			mailobject.setSubject(postUpdatePassMail(updatePasswordInformation));
+//
+//			rabbitMQSender.send(mailobject);
 
-			rabbitMQSender.send(mailobject);
-
-			// emailobj.sendMail(updatePasswordInformation.getEmailId(), "Password updated
-			// sucessfully!",
-			// postUpdatePassMail(updatePasswordInformation));
+			 emailobj.sendMail(updatePasswordInformation.getEmailId(), "Password updated sucessfully!",
+			 postUpdatePassMail(updatePasswordInformation));
 			return true;
 		}
 		return false;

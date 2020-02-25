@@ -1,6 +1,6 @@
 package com.bridgelabz.fundoo.response;
 
-import com.bridgelabz.fundoo.model.NoteDto;
+import com.bridgelabz.fundoo.dto.NoteDto;
 
 public class NoteResponse {
 

@@ -7,9 +7,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bridgelabz.fundoo.dto.LabelDto;
 import com.bridgelabz.fundoo.exception.LabelException;
 import com.bridgelabz.fundoo.model.Label;
-import com.bridgelabz.fundoo.model.LabelDto;
 import com.bridgelabz.fundoo.model.Note;
 import com.bridgelabz.fundoo.model.User;
 import com.bridgelabz.fundoo.repository.ILabelRepository;

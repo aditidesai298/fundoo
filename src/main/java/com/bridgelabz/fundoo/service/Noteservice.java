@@ -10,12 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import com.bridgelabz.fundoo.dto.NoteDto;
+import com.bridgelabz.fundoo.dto.ReminderDto;
 import com.bridgelabz.fundoo.exception.AuthorizationException;
 import com.bridgelabz.fundoo.exception.NoteException;
 import com.bridgelabz.fundoo.exception.ReminderException;
 import com.bridgelabz.fundoo.model.Note;
-import com.bridgelabz.fundoo.model.NoteDto;
-import com.bridgelabz.fundoo.model.ReminderDto;
 import com.bridgelabz.fundoo.model.User;
 import com.bridgelabz.fundoo.repository.INoteRepository;
 import com.bridgelabz.fundoo.repository.IUserRepository;

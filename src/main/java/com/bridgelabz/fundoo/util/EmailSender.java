@@ -14,10 +14,10 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
+//import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
-import com.bridgelabz.fundoo.response.MailObject;
+//import com.bridgelabz.fundoo.response.MailObject;
 
 @Component
 public class EmailSender {
@@ -109,11 +109,11 @@ public class EmailSender {
 		return mimeMessage;
 	}
 	
-	@RabbitListener(queues = "rmq.rube.queue")
-	public void recievedMessage(MailObject user) {
-	
-		sendMail(user.getEmail(),user.getSubject(),user.getMessage());
-		System.out.println("Recieved Message From RabbitMQ: " + user);
-	}
+//	@RabbitListener(queues = "rmq.rube.queue")
+//	public void recievedMessage(MailObject user) {
+//	
+//		sendMail(user.getEmail(),user.getSubject(),user.getMessage());
+//		System.out.println("Recieved Message From RabbitMQ: " + user);
+//	}
 
 }

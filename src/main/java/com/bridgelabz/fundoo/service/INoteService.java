@@ -2,9 +2,9 @@ package com.bridgelabz.fundoo.service;
 
 import java.util.List;
 
+import com.bridgelabz.fundoo.dto.NoteDto;
+import com.bridgelabz.fundoo.dto.ReminderDto;
 import com.bridgelabz.fundoo.model.Note;
-import com.bridgelabz.fundoo.model.NoteDto;
-import com.bridgelabz.fundoo.model.ReminderDto;
 
 public interface INoteService {
 

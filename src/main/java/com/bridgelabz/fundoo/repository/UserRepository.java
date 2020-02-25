@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.bridgelabz.fundoo.model.UpdatePassDto;
+import com.bridgelabz.fundoo.dto.UpdatePassDto;
 import com.bridgelabz.fundoo.model.User;
 
 @Repository

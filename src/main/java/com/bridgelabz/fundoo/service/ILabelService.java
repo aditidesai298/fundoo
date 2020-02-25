@@ -2,8 +2,8 @@ package com.bridgelabz.fundoo.service;
 
 import java.util.List;
 
+import com.bridgelabz.fundoo.dto.LabelDto;
 import com.bridgelabz.fundoo.model.Label;
-import com.bridgelabz.fundoo.model.LabelDto;
 
 public interface ILabelService {
 

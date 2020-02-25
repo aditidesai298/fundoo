@@ -1,6 +1,6 @@
 package com.bridgelabz.fundoo.response;
 
-import com.bridgelabz.fundoo.model.LoginDto;
+import com.bridgelabz.fundoo.dto.LoginDto;
 
 import lombok.Data;
 

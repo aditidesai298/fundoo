@@ -1,8 +1,8 @@
 package com.bridgelabz.fundoo.service;
 
-import com.bridgelabz.fundoo.model.LoginDto;
-import com.bridgelabz.fundoo.model.RegisterDto;
-import com.bridgelabz.fundoo.model.UpdatePassDto;
+import com.bridgelabz.fundoo.dto.LoginDto;
+import com.bridgelabz.fundoo.dto.RegisterDto;
+import com.bridgelabz.fundoo.dto.UpdatePassDto;
 import com.bridgelabz.fundoo.model.User;
 
 public interface IUserService {
