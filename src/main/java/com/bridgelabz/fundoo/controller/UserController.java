@@ -14,9 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bridgelabz.fundoo.dto.EmailDto;
 import com.bridgelabz.fundoo.dto.LoginDto;
 import com.bridgelabz.fundoo.dto.RegisterDto;
 import com.bridgelabz.fundoo.dto.UpdatePassDto;
+import com.bridgelabz.fundoo.dto.UserDto;
 import com.bridgelabz.fundoo.model.User;
 import com.bridgelabz.fundoo.response.LoginResponse;
 import com.bridgelabz.fundoo.response.Response;
@@ -72,8 +74,8 @@ public class UserController {
 
 	@ApiOperation(value = "To login")
 	
-	@PostMapping("/login")
-	public ResponseEntity<LoginResponse> login(@RequestBody LoginDto dto) {
+	@PostMapping("login")
+	public ResponseEntity<Response> login(@RequestBody LoginDto dto) {
 
 		User userInformation = uService.login(dto);
 
@@ -82,20 +84,21 @@ public class UserController {
 
 			return ResponseEntity.status(HttpStatus.ACCEPTED)
 					.header("login successful! Token number:  ", dto.getEmail())
-					.body(new LoginResponse("Login successful! Token number: " + token, 200, dto));
+					.body(new Response("Login successful! Token number: " + token, 200, token));
 		} else {
 
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new LoginResponse("Login failed", 400, dto));
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response("Login failed", 400, dto));
 		}
 	}
 	
 	@ApiOperation(value = "Api for forgot password")
 
 	@PostMapping("forgotPassword")
-	public ResponseEntity<Response> forgotPassword(@RequestParam("email") String email) {
-		boolean fetchedUserStatus = uService.is_User_exists(email);
+	public ResponseEntity<Response> forgotPassword(@RequestBody EmailDto user ) {
+		System.out.println("Inside forgot password controller" + user.getEmailId());
+		boolean fetchedUserStatus = uService.is_User_exists(user.getEmailId());
 		if (fetchedUserStatus) {
-			return ResponseEntity.status(HttpStatus.FOUND).body(new Response("found user", 302));
+			return ResponseEntity.status(HttpStatus.ACCEPTED).body(new Response("found user", 202));
 		}
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new Response("not verified", 401));
 	}

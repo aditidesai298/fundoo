@@ -64,17 +64,16 @@ public class UserService implements IUserService {
 
 		urepo.save(newU);
 
-		String emailBodyContentLink = Util.createLink("http://localhost:8083/user/verification",
+		String emailBodyContentLink = Util.createLink("http://localhost:8085/user/verification",
 				tokenobj.generateToken(newU.getId()));
 		// rabbitmq
 //		mailobject.setEmail(newU.getEmail());
 //		mailobject.setMessage("registration link" + emailBodyContentLink);
 //		mailobject.setSubject("verification");
 
-		rabbitMQSender.send(mailobject);
+		// rabbitMQSender.send(mailobject);
 
-		 emailobj.sendMail(newU.getEmail(), "registration link",
-		 emailBodyContentLink);
+		emailobj.sendMail(newU.getEmail(), "registration link", emailBodyContentLink);
 
 		return true;
 
@@ -97,7 +96,7 @@ public class UserService implements IUserService {
 				return inputUser;
 			}
 
-			String emailBodyLink = Util.createLink("http://localhost:8083" + "/user/verification",
+			String emailBodyLink = Util.createLink("http://localhost:4200" + "/user/verification",
 					tokenobj.generateToken(inputUser.getId()));
 //			mailobject.setEmail(inputUser.getEmail());
 //			mailobject.setMessage("Registration verification link " + emailBodyLink);
@@ -105,8 +104,7 @@ public class UserService implements IUserService {
 //
 //			rabbitMQSender.send(mailobject);
 
-			 emailobj.sendMail(inputUser.getEmail(), "Registration Verification link",
-			 emailBodyLink);
+			emailobj.sendMail(inputUser.getEmail(), "Registration Verification link", emailBodyLink);
 			return inputUser;
 		}
 		// not registered
@@ -115,22 +113,32 @@ public class UserService implements IUserService {
 
 	@Override
 	public boolean is_User_exists(String email) {
+		System.out.println("Inside is_user exists");
 		User user = urepo.getUser(email);
-		if (!user.isVerified()) {
+		if (user != null) {
+			System.out.println("After urepo call" + user);
+
+			if (user.isVerified()) {
+
+				String mail = Util.createLink("http://localhost:8085" + "/user/forgotPassword",
+						tokenobj.generateToken(user.getId()));
+
+//			mailobject.setEmail(user.getEmail());
+//			mailobject.setMessage("Registration verification link" + mail);
+//			mailobject.setSubject("verification");
+				//
+//			rabbitMQSender.send(mailobject);
+
+				emailobj.sendMail(user.getEmail(), "verification", mail);
+				System.out.println("After mail sent");
+				return true;
+
+			}
+			System.out.println("After if statement");
+			System.out.println("Inside if user.isVerified()");
 			return false;
 		}
-
-		String mail = Util.createLink("http://localhost:8083" + "/user/forgotpassword",
-				tokenobj.generateToken(user.getId()));
-
-//		mailobject.setEmail(user.getEmail());
-//		mailobject.setMessage("Registration verification link" + mail);
-//		mailobject.setSubject("verification");
-//
-//		rabbitMQSender.send(mailobject);
-
-		 emailobj.sendMail(user.getEmail(), "verification", mail);
-		return true;
+		return false;
 
 	}
 
@@ -147,8 +155,8 @@ public class UserService implements IUserService {
 //
 //			rabbitMQSender.send(mailobject);
 
-			 emailobj.sendMail(updatePasswordInformation.getEmailId(), "Password updated sucessfully!",
-			 postUpdatePassMail(updatePasswordInformation));
+			emailobj.sendMail(updatePasswordInformation.getEmailId(), "Password updated sucessfully!",
+					postUpdatePassMail(updatePasswordInformation));
 			return true;
 		}
 		return false;
