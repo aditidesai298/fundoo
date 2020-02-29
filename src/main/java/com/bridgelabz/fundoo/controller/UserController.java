@@ -62,7 +62,7 @@ public class UserController {
 	
 	@ApiOperation(value = "To verify registration of user")
 
-	@GetMapping("verification/{token}")
+	@PutMapping("verification/{token}")
 	public ResponseEntity<Response> verifyRegistration(@PathVariable("token") String token) {
 
 		if (uService.isVerified(token)) {

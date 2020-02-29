@@ -10,6 +10,7 @@ import com.bridgelabz.fundoo.configuration.RabbitMQSender;
 import com.bridgelabz.fundoo.dto.LoginDto;
 import com.bridgelabz.fundoo.dto.RegisterDto;
 import com.bridgelabz.fundoo.dto.UpdatePassDto;
+import com.bridgelabz.fundoo.exception.InvalidCredentialsException;
 import com.bridgelabz.fundoo.model.User;
 import com.bridgelabz.fundoo.repository.IUserRepository;
 import com.bridgelabz.fundoo.response.MailObject;
@@ -64,7 +65,7 @@ public class UserService implements IUserService {
 
 		urepo.save(newU);
 
-		String emailBodyContentLink = Util.createLink("http://localhost:8085/user/verification",
+		String emailBodyContentLink = Util.createLink("http://localhost:4200/user/verification",
 				tokenobj.generateToken(newU.getId()));
 		// rabbitmq
 //		mailobject.setEmail(newU.getEmail());
@@ -89,14 +90,18 @@ public class UserService implements IUserService {
 	@Override
 	public User login(LoginDto Ldto) {
 		User inputUser = urepo.getUser(Ldto.getEmail());
+		System.out.println("user which was fetched from urepo"+inputUser);
 		// valid user
 		if (inputUser != null) {
 			// send for verification if not verified
-			if (inputUser.isVerified() && pe.matches(Ldto.getPassword(), inputUser.getPassword())) {
+			if (pe.matches(Ldto.getPassword(), inputUser.getPassword())) {
+				
+				if (inputUser.isVerified()) {
 				return inputUser;
-			}
+				}
+			
 
-			String emailBodyLink = Util.createLink("http://localhost:4200" + "/user/verification",
+			String emailBodyLink = Util.createLink("http://localhost:4200" + "user/verification",
 					tokenobj.generateToken(inputUser.getId()));
 //			mailobject.setEmail(inputUser.getEmail());
 //			mailobject.setMessage("Registration verification link " + emailBodyLink);
@@ -106,6 +111,8 @@ public class UserService implements IUserService {
 
 			emailobj.sendMail(inputUser.getEmail(), "Registration Verification link", emailBodyLink);
 			return inputUser;
+			}
+			throw new InvalidCredentialsException("Opps...Invalid Credentials!", 400);
 		}
 		// not registered
 		return null;
@@ -120,7 +127,7 @@ public class UserService implements IUserService {
 
 			if (user.isVerified()) {
 
-				String mail = Util.createLink("http://localhost:8085" + "/user/forgotPassword",
+				String mail = Util.createLink("http://localhost:4200" + "/user/forgotPassword",
 						tokenobj.generateToken(user.getId()));
 
 //			mailobject.setEmail(user.getEmail());
