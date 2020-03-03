@@ -105,8 +105,8 @@ public class UserController {
 	@ApiOperation(value = "To update password")
 	@PutMapping("updatePassword/{token}")
 	public ResponseEntity<Response> updatePassword(@PathVariable("token") String token,
-			@RequestBody() UpdatePassDto upadatePassword) {
-		boolean updationStatus = uService.updatePassword(upadatePassword, token);
+			@RequestBody() UpdatePassDto updatePassword) {
+		boolean updationStatus = uService.updatePassword(updatePassword, token);
 		if (updationStatus) {
 			return ResponseEntity.status(HttpStatus.OK).body(new Response("updated sucessfully", 200));
 		}
