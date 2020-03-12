@@ -75,19 +75,19 @@ public class UserController {
 	@ApiOperation(value = "To login")
 	
 	@PostMapping("login")
-	public ResponseEntity<Response> login(@RequestBody LoginDto dto) {
+	public ResponseEntity<LoginResponse> login(@RequestBody LoginDto dto) {
 
 		User userInformation = uService.login(dto);
 
 		if (userInformation != null) {
 			String token = tk.generateToken(userInformation.getId());
-
+           System.out.println("Token: "+token);
 			return ResponseEntity.status(HttpStatus.ACCEPTED)
 					.header("login successful! Token number:  ", dto.getEmail())
-					.body(new Response("Login successful! Token number: " + token, 200, token));
+					.body(new LoginResponse("Login successful!", 200, token, userInformation.getfname()));
 		} else {
 
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response("Login failed", 400, dto));
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new LoginResponse("Login failed", 401));
 		}
 	}
 	

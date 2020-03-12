@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bridgelabz.fundoo.dto.NoteDto;
 import com.bridgelabz.fundoo.dto.ReminderDto;
 import com.bridgelabz.fundoo.model.Note;
+import com.bridgelabz.fundoo.response.NoteResponse;
 import com.bridgelabz.fundoo.response.Response;
 import com.bridgelabz.fundoo.service.INoteService;
 
@@ -48,6 +49,7 @@ public class NoteController {
 
 	@PostMapping("create")
 	public ResponseEntity<Response> createNote(@RequestBody NoteDto nDto, @RequestHeader("token") String token) {
+		System.out.println("Inside create note controller");
 		if (nService.createNote(nDto, token)) {
 			return ResponseEntity.status(HttpStatus.CREATED).body(new Response("Note created!", 200));
 		}
@@ -79,12 +81,13 @@ public class NoteController {
 	@ApiOperation(value = "To fetch all notes of a user")
 
 	@GetMapping("fetch/notes")
-	public ResponseEntity<Response> fetchNotes(@RequestHeader("token") String token) {
+	public ResponseEntity<NoteResponse> fetchNotes(@RequestHeader("token") String token) {
 		List<Note> notes = nService.getallNotes(token);
+		System.out.println("notes for response : " + notes);
 		if (!notes.isEmpty()) {
-			return ResponseEntity.status(HttpStatus.OK).body(new Response("Notes are", 200, notes));
+			return ResponseEntity.status(HttpStatus.OK).body(new NoteResponse("Notes are", 200, notes));
 		}
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Error fetching notes", 400));
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new NoteResponse("Error fetching notes", 400,null));
 	}
 
 	@ApiOperation(value = "To archive a note of a user")
@@ -168,7 +171,7 @@ public class NoteController {
 	public ResponseEntity<Response> fetchPinnedNotes(@RequestHeader("token") String token) {
 		List<Note> pinnedNotes = nService.getPinned(token);
 		if (!pinnedNotes.isEmpty()) {
-			return ResponseEntity.status(HttpStatus.OK).body(new Response("Pinned notes are", 200, pinnedNotes));
+			return ResponseEntity.status(HttpStatus.OK).body(new Response("Pinned notes are", 200,pinnedNotes));
 		}
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("No notes pinned", 400));
 	}

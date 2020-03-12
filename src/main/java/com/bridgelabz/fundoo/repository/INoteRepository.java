@@ -3,6 +3,7 @@ package com.bridgelabz.fundoo.repository;
 import java.util.List;
 
 import com.bridgelabz.fundoo.model.Note;
+import com.bridgelabz.fundoo.util.NoteData;
 
 public interface INoteRepository {
 

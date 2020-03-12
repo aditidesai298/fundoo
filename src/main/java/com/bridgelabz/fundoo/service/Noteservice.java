@@ -1,5 +1,6 @@
 package com.bridgelabz.fundoo.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -71,11 +72,11 @@ public class Noteservice implements INoteService {
 	@Override
 	public boolean createNote(NoteDto noteDto, String token) {
 		// found authorized user
-		
+		System.out.println("Note Dto: " + noteDto);
 		User getUser = authenticatedUser(token);
 		Note newNote = new Note();
 		BeanUtils.copyProperties(noteDto, newNote);
-
+		newNote.setCreatedDate(LocalDateTime.now());
 		newNote.setColor("white");
 		getUser.getNotes().add(newNote);
 		nrepo.saveOrUpdate(newNote);
@@ -122,18 +123,20 @@ public class Noteservice implements INoteService {
 	@Override
 	@Transactional
 	public List<Note> getallNotes(String token) {
+		
 		// found authorized user
 		User getUser = authenticatedUser(token);
 		// note found
 		List<Note> getNotes = nrepo.getAllNotes(getUser.getId());
 		if (!getNotes.isEmpty()) {
+			System.out.println("Notes: " +getNotes);
 			return getNotes;
 		}
-		// empty list
+		
+		// empty list+
 		return getNotes;
 	}
 
-	@Override
 	public boolean archiveNote(long noteId, String token) {
 		// found authorized user
 		authenticatedUser(token);

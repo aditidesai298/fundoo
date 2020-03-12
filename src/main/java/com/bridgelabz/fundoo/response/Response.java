@@ -2,6 +2,8 @@ package com.bridgelabz.fundoo.response;
 
 import java.util.List;
 
+import com.bridgelabz.fundoo.model.Note;
+
 public class Response {
 
 	private String message;
@@ -10,23 +12,47 @@ public class Response {
 
 	private Object object;
 
-	List<String> details;
+	private List<Object> details;
+	
+	
+
+	
+
+
+
+	public Response(String message, int statusCode) {
+		
+		this.message = message;
+		this.statusCode = statusCode;
+	}
+
+
 
 	public Response(String message, int statusCode, Object object) {
+		
 		this.message = message;
 		this.statusCode = statusCode;
 		this.object = object;
 	}
 
-	public Response(String message, int statusCode) {
+	
 
+	
+
+
+
+	
+
+
+
+	public Response(String message, int statusCode, List<Object> details) {
+	
 		this.message = message;
 		this.statusCode = statusCode;
+		this.details = details;
 	}
 
-	public Response() {
 
-	}
 
 	public String getMessage() {
 		return message;
@@ -44,21 +70,23 @@ public class Response {
 		this.statusCode = statusCode;
 	}
 
-	public Object getObj() {
+	public Object getObject() {
 		return object;
 	}
 
-	public void setObj(Object obj) {
-		this.object = obj;
+	public void setObject(Object object) {
+		this.object = object;
 	}
 
-	public List<String> getDetails() {
+	public List<Object> getDetails() {
 		return details;
 	}
 
-	public void setDetails(List<String> details) {
+	public void setDetails(List<Object> details) {
 		this.details = details;
 	}
+
+
 
 	@Override
 	public String toString() {
@@ -66,4 +94,10 @@ public class Response {
 				+ details + "]";
 	}
 
+
+
+		
+
+	
+	
 }

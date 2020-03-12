@@ -7,39 +7,50 @@ import lombok.Data;
 @Data
 public class LoginResponse {
 
-	String token;
-	int status;
-	LoginDto dto;
-
-	public LoginResponse(String token, int status, LoginDto dto) {
+	private String message;
+	private int statusCode;
+	private String token;
+	private String firstName;
+	public LoginResponse(String message, int statusCode, String token, String firstName) {
 		super();
+		this.message = message;
+		this.statusCode = statusCode;
 		this.token = token;
-		this.status = status;
-		this.dto = dto;
+		this.firstName = firstName;
 	}
-	
+	public LoginResponse(String message, int statusCode) {
+
+		this.message = message;
+		this.statusCode = statusCode;
+	}
+	public String getMessage() {
+		return message;
+	}
+	public void setMessage(String message) {
+		this.message = message;
+	}
+	public int getStatusCode() {
+		return statusCode;
+	}
+	public void setStatusCode(int statusCode) {
+		this.statusCode = statusCode;
+	}
 	public String getToken() {
 		return token;
 	}
-
 	public void setToken(String token) {
 		this.token = token;
 	}
-
-	public int getStatus() {
-		return status;
+	public String getFirstName() {
+		return firstName;
 	}
-
-	public void setStatus(int status) {
-		this.status = status;
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
 	}
-
-	public LoginDto getDto() {
-		return dto;
-	}
-
-	public void setDto(LoginDto dto) {
-		this.dto = dto;
+	@Override
+	public String toString() {
+		return "LoginResponse [message=" + message + ", statusCode=" + statusCode + ", token=" + token + ", firstName="
+				+ firstName + "]";
 	}
 
 }

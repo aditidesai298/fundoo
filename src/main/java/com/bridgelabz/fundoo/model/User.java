@@ -24,7 +24,7 @@ public class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
+	@Column(name = "u_id")
 	private long id;
 
 	private String fname;
@@ -44,13 +44,13 @@ public class User {
 	private boolean isVerified;
 
 	@JsonIgnore
-	@OneToMany
-	@JoinColumn(name = "id")
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "u_id")
 	private List<Note> notes;
 
 	@JsonIgnore
 	@OneToMany
-	@JoinColumn(name = "id")
+	@JoinColumn(name = "u_id")
 	private List<Label> labels;
 
 	@JsonIgnore
@@ -91,11 +91,11 @@ public class User {
 		this.id = id;
 	}
 
-	public String getFname() {
+	public String getfname() {
 		return fname;
 	}
 
-	public void setFname(String fname) {
+	public void setfname(String fname) {
 		this.fname = fname;
 	}
 

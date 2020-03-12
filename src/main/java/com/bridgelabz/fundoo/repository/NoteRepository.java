@@ -45,13 +45,16 @@ public class NoteRepository implements INoteRepository {
 		query.executeUpdate();
 		return true;
 	}
-	@Override
 	@Transactional
-	public List<Note> getAllNotes(long uId) {
+	@Override
+	
+	public List<Note> getAllNotes(long uid) {
 		Session session = entityManager.unwrap(Session.class);
-		Query query = session.createQuery("FROM Note WHERE id=:id and is_trashed=false and is_archived=false");
-				query.setParameter("id", uId);
+		Query query = session.createQuery("FROM Note WHERE u_id=:id and is_trashed=false and is_archived=false");
+				query.setParameter("id", uid);
 				return query.getResultList();
+//				System.out.println("notes  repo; " + notes);                       
+//				return notes;
 			
 
 	}
