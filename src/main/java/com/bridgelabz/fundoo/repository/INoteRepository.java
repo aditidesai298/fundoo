@@ -14,8 +14,13 @@ public interface INoteRepository {
 	public boolean deleteNote(long noteId);
 
 	public List<Note> getAllNotes(long userId);
-	public List<Note> getTrashed(long userId);
+	public List<Note> getAllTrashed(long userId);
 	public List<Note> getPinned(long userId);
+
+	List<Note> getAllArchived(long uId);
+	public List<Note> getAllReminderNotes(long uId);
+
+
 
 
 }

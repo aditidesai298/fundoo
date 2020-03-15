@@ -59,12 +59,27 @@ public class NoteRepository implements INoteRepository {
 
 	}
 	@Override
-	public List<Note> getTrashed(long uId) {
+	public List<Note> getAllTrashed(long uId) {
 		Session session = entityManager.unwrap(Session.class);
-		Query query = session.createQuery("FROM Note WHERE id=:id and is_trashed=true");
+		Query query = session.createQuery("FROM Note WHERE u_id=:id and is_trashed=true");
 				query.setParameter("id", uId);
 		return query.getResultList();
 	}
+	@Override
+	public List<Note> getAllArchived(long uId) {
+		Session session = entityManager.unwrap(Session.class);
+		Query query = session.createQuery("FROM Note WHERE u_id=:id and is_archived=true and is_trashed=false");
+				query.setParameter("id", uId);
+		return query.getResultList();
+	}
+	@Override
+	public List<Note> getAllReminderNotes(long uId) {
+		Session session = entityManager.unwrap(Session.class);
+		Query query = session.createQuery("FROM Note WHERE u_id=:id and reminder_date!=null and is_trashed=false");
+				query.setParameter("id", uId);
+		return query.getResultList();
+	}
+	
 	
 	@Override
 	public List<Note> getPinned(long uId) {

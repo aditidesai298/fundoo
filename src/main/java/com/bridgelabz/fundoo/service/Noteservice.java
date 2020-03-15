@@ -250,13 +250,35 @@ public class Noteservice implements INoteService {
 	@Override
 	public List<Note> getTrashed(String token) {
 		// note found of authenticated user
-		List<Note> getTrashed = nrepo.getTrashed(authenticatedUser(token).getId());
+		List<Note> getTrashed = nrepo.getAllTrashed(authenticatedUser(token).getId());
 		if (!getTrashed.isEmpty()) {
 			return getTrashed;
 		}
 		// empty list
 		return getTrashed;
 	}
+	
+	@Override
+	public List<Note> getArchived(String token) {
+		// note found of authenticated user
+		List<Note> getArchived = nrepo.getAllArchived(authenticatedUser(token).getId());
+		if (!getArchived.isEmpty()) {
+			return getArchived;
+		}
+		// empty list
+		return getArchived;
+	}
+	@Override
+	public List<Note> getAllReminderNotes(String token) {
+		// note found of authenticated user
+		List<Note> getReminder = nrepo.getAllReminderNotes(authenticatedUser(token).getId());
+		if (!getReminder.isEmpty()) {
+			return getReminder;
+		}
+		// empty list
+		return getReminder;
+	}
+
 
 	@Override
 	public List<Note> getPinned(String token) {

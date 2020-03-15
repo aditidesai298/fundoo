@@ -35,4 +35,8 @@ public interface INoteService {
 	
 	public List<Note> getPinned(String token);
 
+	List<Note> getArchived(String token);
+
+	List<Note> getAllReminderNotes(String token);
+
 }

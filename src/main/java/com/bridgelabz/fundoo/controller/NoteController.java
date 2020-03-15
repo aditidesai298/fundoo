@@ -164,6 +164,26 @@ public class NoteController {
 		}
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Empty trash", 400));
 	}
+	@ApiOperation(value = "To fetch all archived notes for user")
+
+	@GetMapping("fetch/notes/archived")
+	public ResponseEntity<Response> fetchArchivedNotes(@RequestHeader("token") String token) {
+		List<Note> archiveNotes = nService.getArchived(token);
+		if (!archiveNotes.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.OK).body(new Response("Trashed notes are", 200, archiveNotes));
+		}
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Empty trash", 400));
+	}
+	@ApiOperation(value = "To fetch all notes that have reminder set from user")
+
+	@GetMapping("fetch/notes/reminders")
+	public ResponseEntity<Response> fetchAllReminderNotes(@RequestHeader("token") String token) {
+		List<Note> reminderNotes = nService.getAllReminderNotes(token);
+		if (!reminderNotes.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.OK).body(new Response("Trashed notes are", 200, reminderNotes));
+		}
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Empty trash", 400));
+	}
 
 	@ApiOperation(value = "To get all pinned notes for user")
 

@@ -2,8 +2,6 @@ package com.bridgelabz.fundoo.response;
 
 import java.util.List;
 
-import com.bridgelabz.fundoo.model.Note;
-
 public class Response {
 
 	private String message;
@@ -13,20 +11,12 @@ public class Response {
 	private Object object;
 
 	private List<Object> details;
-	
-	
-
-	
-
-
 
 	public Response(String message, int statusCode) {
 		
 		this.message = message;
 		this.statusCode = statusCode;
 	}
-
-
 
 	public Response(String message, int statusCode, Object object) {
 		
