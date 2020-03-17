@@ -151,6 +151,11 @@ public class Noteservice implements INoteService {
 			nrepo.saveOrUpdate(getNote);
 			return true;
 		}
+		getNote.setArchived(false);
+//		fetchedNote.setUpdatedDate(LocalDateTime.now());
+		nrepo.saveOrUpdate(getNote);
+
+          
 		// if archived already
 		return false;
 	}

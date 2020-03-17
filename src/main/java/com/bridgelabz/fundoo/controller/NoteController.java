@@ -93,7 +93,7 @@ public class NoteController {
 
 	@ApiOperation(value = "To archive a note of a user")
 
-	@PatchMapping("{id}/archive")
+	@DeleteMapping("{id}/archive")
 	public ResponseEntity<Response> archiveNote(@PathVariable("id") long noteId, @RequestHeader("token") String token) {
 		if (nService.archiveNote(noteId, token)) {
 			return ResponseEntity.status(HttpStatus.OK).body(new Response("note archived", 200));
