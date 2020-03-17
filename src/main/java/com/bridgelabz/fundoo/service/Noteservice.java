@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.bridgelabz.fundoo.dto.NoteDto;
 import com.bridgelabz.fundoo.dto.ReminderDto;
+import com.bridgelabz.fundoo.dto.UpdateNoteDto;
 import com.bridgelabz.fundoo.exception.AuthorizationException;
 import com.bridgelabz.fundoo.exception.NoteException;
 import com.bridgelabz.fundoo.exception.ReminderException;
@@ -109,8 +110,9 @@ public class Noteservice implements INoteService {
 	}
 
 	@Override
-	public boolean updateNote(NoteDto noteDto, long noteId, String token) {
+	public boolean updateNote(UpdateNoteDto noteDto, String token) {
 		// found authorized user
+		long noteId=getRedisCacheId(token);
 		authenticatedUser(token);
 		// verified valid note
 		Note getNote = isVerified(noteId);

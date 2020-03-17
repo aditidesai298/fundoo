@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.bridgelabz.fundoo.dto.NoteDto;
 import com.bridgelabz.fundoo.dto.ReminderDto;
+import com.bridgelabz.fundoo.dto.UpdateNoteDto;
 import com.bridgelabz.fundoo.model.Note;
 import com.bridgelabz.fundoo.util.NoteData;
 
@@ -13,7 +14,7 @@ public interface INoteService {
 
 	public boolean deleteNote(long noteId, String token);
 
-	public boolean updateNote(NoteDto noteDto, long noteId, String token);
+	public boolean updateNote(UpdateNoteDto noteDto, String token);
 
 	public List<Note> getallNotes(String token);
 
@@ -38,5 +39,6 @@ public interface INoteService {
 	List<Note> getArchived(String token);
 
 	List<Note> getAllReminderNotes(String token);
+
 
 }

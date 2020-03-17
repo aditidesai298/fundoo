@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bridgelabz.fundoo.dto.NoteDto;
 import com.bridgelabz.fundoo.dto.ReminderDto;
+import com.bridgelabz.fundoo.dto.UpdateNoteDto;
 import com.bridgelabz.fundoo.model.Note;
 import com.bridgelabz.fundoo.response.NoteResponse;
 import com.bridgelabz.fundoo.response.Response;
@@ -70,9 +71,9 @@ public class NoteController {
 	@ApiOperation(value = "To update an existing note")
 
 	@PutMapping("update")
-	public ResponseEntity<Response> updateNote(@RequestBody NoteDto noteDto, @RequestParam("id") long noteId,
+	public ResponseEntity<Response> updateNote(@RequestBody UpdateNoteDto noteDto,
 			@RequestHeader("token") String token) {
-		if (nService.updateNote(noteDto, noteId, token)) {
+		if (nService.updateNote(noteDto, token)) {
 			return ResponseEntity.status(HttpStatus.OK).body(new Response("Note updated! ", 200));
 		}
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response("Error updating note  ", 400));
