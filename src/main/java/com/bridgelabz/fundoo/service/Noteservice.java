@@ -100,11 +100,11 @@ public class Noteservice implements INoteService {
 		 * Example for implementing Redis Cache
 		 */
 		
-		noteId = getRedisCacheId(token);
+//		noteId = getRedisCacheId(token);
 
-		//authenticatedUser(token);
+		authenticatedUser(token);
 
-		//isVerified(noteId);
+		isVerified(noteId);
 		nrepo.deleteNote(noteId);
 		return true;
 	}
@@ -236,22 +236,21 @@ public class Noteservice implements INoteService {
 		throw new ReminderException("Reminder already removed!", 502);
 	}
 
-	@Transactional
+	
 	@Override
-	public boolean restored(String token, Long noteId) {
-
+	public boolean restoreNote(long noteId, String token) {
+		// found authorized user
 		authenticatedUser(token);
-
-		Note getNote = isVerified(noteId);
-		if (getNote.isTrashed()) {
-			getNote.setTrashed(false);
-
-			nrepo.saveOrUpdate(getNote);
+		// verified valid note
+		Note fetchedNote = isVerified(noteId);
+		if (fetchedNote.isTrashed()) {
+			fetchedNote.setTrashed(false);
+			fetchedNote.setUpdatedDate(LocalDateTime.now());
+			nrepo.saveOrUpdate(fetchedNote);
+//			elasticSearchRepository.updateNote(fetchedNote);
 			return true;
-
 		}
 		return false;
-
 	}
 
 	@Override
@@ -295,6 +294,12 @@ public class Noteservice implements INoteService {
 //			return fetchedPinnedNotes;
 //		}
 		return getPinned;
+	}
+
+	@Override
+	public boolean Note(String token, Long noteid) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

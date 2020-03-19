@@ -146,14 +146,17 @@ public class NoteController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(new Response("Reminder removed!", 200));
 	}
 
-//	@PostMapping("/notes/restore/{id}")
-//	public ResponseEntity<Response> restore(@RequestHeader String token, @PathVariable Long noteId) {
-//		if (nService.restored(token, noteId)) {
-//			return ResponseEntity.status(HttpStatus.OK).body(new Response("note restored", 200));
-//		}
-//		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response( "Note is Trashed",400));
-//				
-//	}
+	@ApiOperation(value = "To restore a deleted note by the user")
+	@PutMapping("{id}/restore")
+	public ResponseEntity<Response> restoreNote(@PathVariable("id") long noteId,
+			@RequestHeader("token") String token) {
+		if (nService.restoreNote(noteId, token)) {
+			return ResponseEntity.status(HttpStatus.OK).body(new Response("Note restored", 200));
+		}
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+				.body(new Response("Opps...Error Restoring note!", 400));
+
+	}
 
 	@ApiOperation(value = "To fetch all trashed notes for user")
 
