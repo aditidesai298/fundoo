@@ -112,7 +112,7 @@ public class NoteController {
 
 	@ApiOperation(value = "To change the color of a note of a user")
 
-	@PostMapping("{id}/colour")
+	@PatchMapping("{id}")
 	public ResponseEntity<Response> changeColour(@RequestHeader("token") String token, @PathVariable("id") long noteId,
 			@RequestParam("color") String noteColour) {
 		nService.changeColour(token, noteId, noteColour);
