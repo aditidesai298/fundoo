@@ -43,7 +43,7 @@ public class LabelController {
 	@Autowired
 	private ILabelService lService;
 
-	@PostMapping("create")
+	@PostMapping("/create")
 	@ApiOperation(value = "To create a label")
 	public ResponseEntity<Response> createLabel(@RequestHeader("token") String token, @RequestBody LabelDto labelDto) {
 		lService.createLabel(token, labelDto);
@@ -78,7 +78,7 @@ public class LabelController {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response("Cannot delete label", 400));
 	}
 
-	@GetMapping("/fetch/labels")
+	@GetMapping("/fetch")
 	@ApiOperation(value = "To get all the labels from user")
 	public ResponseEntity<Response> getAllLabels(@RequestHeader("token") String token) {
 		List<Label> foundLabelList = lService.foundLabelsList(token);

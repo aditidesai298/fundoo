@@ -30,6 +30,8 @@ public class User {
 	private String fname;
 
 	private String lname;
+	
+	private String gender;
 
 	@Column(unique = true)
 	private String email;
